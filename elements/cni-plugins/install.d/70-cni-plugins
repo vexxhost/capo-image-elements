@@ -1,0 +1,29 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_CNI_PLUGINS_VERSION=${DIB_CNI_PLUGINS_VERSION:-"1.5.1"}
+DIB_CNI_PLUGINS_URL=${DIB_CNI_PLUGINS_URL:-"https://github.com/containernetworking/plugins/releases/download/v${DIB_CNI_PLUGINS_VERSION}/cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz"}
+DIB_CNI_PLUGINS_SHA256SUM_URL=${DIB_CNI_PLUGINS_SHA256SUM_URL:-"${DIB_CNI_PLUGINS_URL}.sha256"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_CNI_PLUGINS_URL
+curl -LO $DIB_CNI_PLUGINS_SHA256SUM_URL
+sha256sum cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz
+
+# Extract into /opt/cni/bin
+install -d /opt/cni/bin
+tar -C /opt/cni/bin -xvzf cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz
+
+# Ensure IPv6 is enabled
+sysctl-set-value net.ipv6.conf.all.disable_ipv6 0

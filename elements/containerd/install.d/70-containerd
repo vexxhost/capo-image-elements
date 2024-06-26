@@ -1,0 +1,36 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_CONTAINERD_VERSION=${DIB_CONTAINERD_VERSION:-"1.7.18"}
+DIB_CONTAINERD_URL=${DIB_CONTAINERD_URL:-"https://github.com/containerd/containerd/releases/download/v${DIB_CONTAINERD_VERSION}/containerd-${DIB_CONTAINERD_VERSION}-linux-${ARCH}.tar.gz"}
+DIB_CONTAINERD_SHA256SUM_URL=${DIB_CONTAINERD_SHA256SUM_URL:-"${DIB_CONTAINERD_URL}.sha256sum"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_CONTAINERD_URL
+curl -LO $DIB_CONTAINERD_SHA256SUM_URL
+sha256sum -c containerd-${DIB_CONTAINERD_VERSION}-linux-${ARCH}.tar.gz.sha256sum
+
+# Extract into /usr/bin
+tar --strip-components=1 -C /usr/bin -xvzf containerd-${DIB_CONTAINERD_VERSION}-linux-${ARCH}.tar.gz
+
+# Create folders for configuration
+install -d -o root -g root -m 711 /etc/containerd
+install -d -o root -g root -m 711 /var/lib/containerd
+install -d -o root -g root -m 711 /run/containerd
+
+# Create containerd config file
+containerd config default > /etc/containerd/config.toml
+
+# Enable service
+systemctl enable containerd

@@ -1,0 +1,24 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_RUNC_VERSION=${DIB_RUNC_VERSION:-"1.1.13"}
+DIB_RUNC_BASE_URL=${DIB_RUNC_BASE_URL:-"https://github.com/opencontainers/runc/releases/download/v${DIB_RUNC_VERSION}/runc"}
+DIB_RUNC_URL=${DIB_RUNC_URL:-"${DIB_RUNC_BASE_URL}.${ARCH}"}
+DIB_RUNC_SHA256SUM_URL=${DIB_RUNC_SHA256SUM_URL:-"${DIB_RUNC_BASE_URL}.sha256sum"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_RUNC_URL
+curl -LO $DIB_RUNC_SHA256SUM_URL
+grep "runc.${ARCH}" runc.sha256sum | sha256sum -c
+install -m 755 runc.${ARCH} /usr/bin/runc

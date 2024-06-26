@@ -1,0 +1,30 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+# start containerd temporarily, and run pull (but we need to start it as a binary because systemd is not running)
+containerd --config /etc/containerd/config.toml &
+
+# Wait for the socket to appear
+while [ ! -S /run/containerd/containerd.sock ]; do
+    sleep 1
+done
+
+# Pull all images
+kubeadm config images pull --kubernetes-version=${DIB_KUBERNETES_VERSION}
+
+# Stop containerd
+# TODO(mnaser): Make sure it's the one we spawned?
+kill $(pgrep containerd)
+
+# Wait for the socket to disappear
+while [ -S /run/containerd/containerd.sock ]; do
+    sleep 1
+done
+ 

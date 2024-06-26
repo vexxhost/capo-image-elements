@@ -1,0 +1,32 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_CRI_TOOLS_VERSION=${DIB_CRI_TOOLS_VERSION:-"1.30.0"}
+
+DIB_CRICTL_URL=${DIB_CRICTL_URL:-"https://github.com/kubernetes-sigs/cri-tools/releases/download/v${DIB_CRI_TOOLS_VERSION}/crictl-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz"}
+DIB_CRICTL_SHA256SUM_URL=${DIB_CRICTL_SHA256SUM_URL:-"${DIB_CRICTL_URL}.sha256"}
+
+DIB_CRITEST_URL=${DIB_CRITEST_URL:-"https://github.com/kubernetes-sigs/cri-tools/releases/download/v${DIB_CRI_TOOLS_VERSION}/critest-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz"}
+DIB_CRITEST_SHA256SUM_URL=${DIB_CRITEST_SHA256SUM_URL:-"${DIB_CRITEST_URL}.sha256"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify (crictl)
+cd ${TMPDIR}
+curl -LO $DIB_CRICTL_URL
+echo "$(curl -Ls $DIB_CRICTL_SHA256SUM_URL)  crictl-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz" | sha256sum -c -
+tar -C /usr/bin -xvzf crictl-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz
+
+# Download and verify (critest)
+cd ${TMPDIR}
+curl -LO $DIB_CRITEST_URL
+echo "$(curl -Ls $DIB_CRITEST_SHA256SUM_URL)  critest-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz" | sha256sum -c -
+tar -C /usr/bin -xvzf critest-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz

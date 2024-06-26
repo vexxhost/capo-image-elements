@@ -1,0 +1,41 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_KUBELET_VERSION=${DIB_KUBELET_VERSION:-"1.30.2"}
+DIB_KUBELET_URL=${DIB_KUBELET_URL:-"https://dl.k8s.io/release/v${DIB_KUBELET_VERSION}/bin/linux/${ARCH}/kubelet"}
+DIB_KUBELET_SHA256SUM_URL=${DIB_KUBELET_SHA256SUM_URL:-"${DIB_KUBELET_URL}.sha256"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_KUBELET_URL
+echo "$(curl -Ls $DIB_KUBELET_SHA256SUM_URL)  kubelet" | sha256sum -c -
+install -m 755 kubelet /usr/bin/kubelet
+
+# Configure sysctl values
+sysctl-set-value fs.inotify.max_user_instances 8192
+sysctl-set-value fs.inotify.max_user_watches 524288
+sysctl-set-value kernel.panic 10
+sysctl-set-value kernel.panic_on_oops 1
+sysctl-set-value net.bridge.bridge-nf-call-ip6tables 1
+sysctl-set-value net.bridge.bridge-nf-call-iptables 1
+sysctl-set-value net.ipv4.conf.all.rp_filter 0
+sysctl-set-value net.ipv4.ip_forward 1
+sysctl-set-value net.ipv4.tcp_congestion_control bbr
+sysctl-set-value net.ipv6.conf.all.disable_ipv6 0
+sysctl-set-value net.ipv6.conf.all.forwarding 1
+sysctl-set-value vm.overcommit_memory 1
+
+# TODO: make sure no swap?
+
+# Enable service
+systemctl enable kubelet

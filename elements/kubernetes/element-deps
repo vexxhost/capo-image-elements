@@ -1,0 +1,7 @@
+cni-plugins
+containerd
+cri-tools
+kubeadm
+kubectl
+kubelet
+runc

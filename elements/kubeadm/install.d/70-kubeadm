@@ -1,0 +1,22 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_KUBEADM_VERSION=${DIB_KUBEADM_VERSION:-"1.30.2"}
+DIB_KUBEADM_URL=${DIB_KUBEADM_URL:-"https://dl.k8s.io/release/v${DIB_KUBEADM_VERSION}/bin/linux/${ARCH}/kubeadm"}
+DIB_KUBEADM_SHA256SUM_URL=${DIB_KUBEADM_SHA256SUM_URL:-"${DIB_KUBEADM_URL}.sha256"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_KUBEADM_URL
+echo "$(curl -Ls $DIB_KUBEADM_SHA256SUM_URL)  kubeadm" | sha256sum -c -
+install -m 755 kubeadm /usr/bin/kubeadm

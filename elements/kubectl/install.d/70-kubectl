@@ -1,0 +1,22 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+DIB_KUBECTL_VERSION=${DIB_KUBECTL_VERSION:-"1.30.2"}
+DIB_KUBECTL_URL=${DIB_KUBECTL_URL:-"https://dl.k8s.io/release/v${DIB_KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl"}
+DIB_KUBECTL_SHA256SUM_URL=${DIB_KUBECTL_SHA256SUM_URL:-"${DIB_KUBECTL_URL}.sha256"}
+
+TMPDIR=$(mktemp -d)
+trap "rm -rf $TMPDIR" EXIT
+
+# Download and verify
+cd ${TMPDIR}
+curl -LO $DIB_KUBECTL_URL
+echo "$(curl -Ls $DIB_KUBECTL_SHA256SUM_URL)  kubectl" | sha256sum -c -
+install -m 755 kubectl /usr/bin/kubectl
