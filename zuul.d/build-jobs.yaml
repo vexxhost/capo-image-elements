@@ -30,3 +30,16 @@
       os: ubuntu
       release: jammy
       script: 1-30-2.sh
+- project:
+    check:
+      jobs:
+      - capo-image-elements-build-ubuntu-jammy-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-1-30-2
+    gate:
+      jobs:
+      - capo-image-elements-build-ubuntu-jammy-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-1-30-2

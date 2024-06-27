@@ -6,7 +6,7 @@ import yaml
 
 
 def main():
-    jobs = []
+    config = []
     scripts = glob.glob("images/*/*/*.sh")
 
     for script in sorted(scripts):
@@ -26,10 +26,24 @@ def main():
             }
         }
 
-        jobs.append(job)
+        config.append(job)
+
+    config += [
+        {
+            "project": {
+                "check": {
+                    "jobs": [job["job"]["name"] for job in config]
+                },
+                "gate": {
+                    "jobs": [job["job"]["name"] for job in config]
+                }
+            }
+        }
+    ]
+    
 
     with open("zuul.d/build-jobs.yaml", "w", encoding="utf-8") as f:
-        f.write(yaml.dump(jobs))
+        f.write(yaml.dump(config))
 
 
 if __name__ == "__main__":
