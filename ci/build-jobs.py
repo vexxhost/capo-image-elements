@@ -23,6 +23,9 @@ def main():
                     "release": release,
                     "script": version_data,
                 },
+                "files": [
+                    f"images/{os}/{release}/{version}.sh",
+                ]
             }
         }
 
