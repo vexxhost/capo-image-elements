@@ -1,0 +1,32 @@
+- job:
+    name: capo-image-elements-build-ubuntu-jammy-1-27-15
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: ubuntu
+      release: jammy
+      script: 1-27-15.sh
+- job:
+    name: capo-image-elements-build-ubuntu-jammy-1-28-11
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: ubuntu
+      release: jammy
+      script: 1-28-11.sh
+- job:
+    name: capo-image-elements-build-ubuntu-jammy-1-29-6
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: ubuntu
+      release: jammy
+      script: 1-29-6.sh
+- job:
+    name: capo-image-elements-build-ubuntu-jammy-1-30-2
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: ubuntu
+      release: jammy
+      script: 1-30-2.sh

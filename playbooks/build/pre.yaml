@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: Apache-2.0
+
+- hosts: all
+  roles:
+    - ensure-python
+    - ensure-pip
+
+- hosts: all
+  tasks:
+    - name: Install "diskimage-builder" package
+      ansible.builtin.command: pip install diskimage-builder
