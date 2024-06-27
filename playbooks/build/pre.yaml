@@ -5,6 +5,7 @@
     - role: bindep
     - role: ensure-python
     - role: ensure-pip
+    - role: ensure-docker
       when: os == 'rockylinux'
 
 - hosts: all
