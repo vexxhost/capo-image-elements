@@ -1,1 +1,1 @@
-qemu-img
+qemu-utils
