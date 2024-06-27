@@ -4,3 +4,7 @@
   tasks:
     - name: Build image
       ansible.builtin.command: "./images/{{ os }}/{{ release }}/{{ script }}"
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+      environment:
+        PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
