@@ -6,7 +6,7 @@ import yaml
 
 
 def main():
-    config = [{"nodeset": {"name": "jammy-4c-16g", "nodes": ["jammy-4c-16g"]}}]
+    config = []
     scripts = glob.glob("images/*/*/*.sh")
 
     jobs = []
@@ -27,6 +27,14 @@ def main():
                 "files": [
                     f"images/{os}/{release}/{version}.sh",
                 ],
+                "nodeset": {
+                    "nodes": [
+                        {
+                            "name": "ubuntu-jammy",
+                            "label": "jammy-4c-16g",
+                        }
+                    ]
+                },
             }
         }
 
