@@ -8,3 +8,4 @@
         chdir: "{{ zuul.project.src_dir }}"
       environment:
         PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
+        DIB_CLOUD_IMAGES: "https://static.atmosphere.dev/mirrors/ubuntu-cloud-images/$DIB_RELEASE/current/jammy-server-cloudimg-amd64.squashfs"
