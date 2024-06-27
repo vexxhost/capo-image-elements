@@ -4,6 +4,8 @@ import glob
 
 import yaml
 
+DISABLED_OS = ["rockylinux"]
+
 
 def main():
     config = []
@@ -13,6 +15,9 @@ def main():
     for script in sorted(scripts):
         _, os, release, version_data = script.split("/")
         version = version_data.replace(".sh", "")
+
+        if os in DISABLED_OS:
+            continue
 
         job = {
             "job": {
