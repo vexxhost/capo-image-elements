@@ -1,3 +1,28 @@
+- nodeset:
+    name: jammy-4c-16g
+    nodes:
+    - jammy-4c-16g
+- project:
+    check:
+      jobs:
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
+    gate:
+      jobs:
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
 - job:
     files:
     - images/rockylinux/9/1-27-15.sh
@@ -78,24 +103,3 @@
       os: ubuntu
       release: jammy
       script: 1-30-2.sh
-- project:
-    check:
-      jobs:
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
-    gate:
-      jobs:
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
-      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2

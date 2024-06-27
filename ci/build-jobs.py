@@ -6,9 +6,10 @@ import yaml
 
 
 def main():
-    config = []
+    config = [{"nodeset": {"name": "jammy-4c-16g", "nodes": ["jammy-4c-16g"]}}]
     scripts = glob.glob("images/*/*/*.sh")
 
+    jobs = []
     for script in sorted(scripts):
         _, os, release, version_data = script.split("/")
         version = version_data.replace(".sh", "")
@@ -25,25 +26,20 @@ def main():
                 },
                 "files": [
                     f"images/{os}/{release}/{version}.sh",
-                ]
+                ],
             }
         }
 
-        config.append(job)
+        jobs.append(job)
 
     config += [
         {
             "project": {
-                "check": {
-                    "jobs": [job["job"]["name"] for job in config]
-                },
-                "gate": {
-                    "jobs": [job["job"]["name"] for job in config]
-                }
+                "check": {"jobs": [job["job"]["name"] for job in jobs]},
+                "gate": {"jobs": [job["job"]["name"] for job in jobs]},
             }
         }
-    ]
-    
+    ] + jobs
 
     with open("zuul.d/build-jobs.yaml", "w", encoding="utf-8") as f:
         f.write(yaml.dump(config))

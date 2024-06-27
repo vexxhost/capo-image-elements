@@ -2,9 +2,10 @@
 
 - hosts: all
   roles:
-    - bindep
-    - ensure-python
-    - ensure-pip
+    - role: bindep
+    - role: ensure-python
+    - role: ensure-pip
+      when: os == 'rockylinux'
 
 - hosts: all
   tasks:
