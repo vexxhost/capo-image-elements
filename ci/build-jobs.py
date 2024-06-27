@@ -15,7 +15,7 @@ def main():
 
         job = {
             "job": {
-                "name": f"capo-image-elements-build-{os}-{release}-{version}",
+                "name": f"capo-image-elements-build-{os}-{release}-kubernetes-{version}",
                 "pre-run": "playbooks/build/pre.yaml",
                 "run": "playbooks/build/run.yaml",
                 "vars": {

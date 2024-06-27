@@ -1,5 +1,47 @@
 - job:
-    name: capo-image-elements-build-ubuntu-jammy-1-27-15
+    files:
+    - images/rockylinux/9/1-27-15.sh
+    name: capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: rockylinux
+      release: '9'
+      script: 1-27-15.sh
+- job:
+    files:
+    - images/rockylinux/9/1-28-11.sh
+    name: capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: rockylinux
+      release: '9'
+      script: 1-28-11.sh
+- job:
+    files:
+    - images/rockylinux/9/1-29-6.sh
+    name: capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: rockylinux
+      release: '9'
+      script: 1-29-6.sh
+- job:
+    files:
+    - images/rockylinux/9/1-30-2.sh
+    name: capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: rockylinux
+      release: '9'
+      script: 1-30-2.sh
+- job:
+    files:
+    - images/ubuntu/jammy/1-27-15.sh
+    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
     pre-run: playbooks/build/pre.yaml
     run: playbooks/build/run.yaml
     vars:
@@ -7,7 +49,9 @@
       release: jammy
       script: 1-27-15.sh
 - job:
-    name: capo-image-elements-build-ubuntu-jammy-1-28-11
+    files:
+    - images/ubuntu/jammy/1-28-11.sh
+    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
     pre-run: playbooks/build/pre.yaml
     run: playbooks/build/run.yaml
     vars:
@@ -15,7 +59,9 @@
       release: jammy
       script: 1-28-11.sh
 - job:
-    name: capo-image-elements-build-ubuntu-jammy-1-29-6
+    files:
+    - images/ubuntu/jammy/1-29-6.sh
+    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
     pre-run: playbooks/build/pre.yaml
     run: playbooks/build/run.yaml
     vars:
@@ -23,7 +69,9 @@
       release: jammy
       script: 1-29-6.sh
 - job:
-    name: capo-image-elements-build-ubuntu-jammy-1-30-2
+    files:
+    - images/ubuntu/jammy/1-30-2.sh
+    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
     pre-run: playbooks/build/pre.yaml
     run: playbooks/build/run.yaml
     vars:
@@ -33,13 +81,21 @@
 - project:
     check:
       jobs:
-      - capo-image-elements-build-ubuntu-jammy-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-1-30-2
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
     gate:
       jobs:
-      - capo-image-elements-build-ubuntu-jammy-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-1-30-2
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-27-15
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
