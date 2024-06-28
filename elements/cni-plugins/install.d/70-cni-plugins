@@ -23,4 +23,4 @@ sha256sum cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz
 
 # Extract into /opt/cni/bin
 install -d /opt/cni/bin
-tar -C /opt/cni/bin -xvzf cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz
+tar --no-same-owner -C /opt/cni/bin -xvzf cni-plugins-linux-${ARCH}-v${DIB_CNI_PLUGINS_VERSION}.tgz
