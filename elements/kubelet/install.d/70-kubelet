@@ -22,18 +22,20 @@ echo "$(curl -Ls $DIB_KUBELET_SHA256SUM_URL)  kubelet" | sha256sum -c -
 install -m 755 kubelet /usr/bin/kubelet
 
 # Configure sysctl values
-sysctl-set-value fs.inotify.max_user_instances 8192
-sysctl-set-value fs.inotify.max_user_watches 524288
-sysctl-set-value kernel.panic 10
-sysctl-set-value kernel.panic_on_oops 1
-sysctl-set-value net.bridge.bridge-nf-call-ip6tables 1
-sysctl-set-value net.bridge.bridge-nf-call-iptables 1
-sysctl-set-value net.ipv4.conf.all.rp_filter 0
-sysctl-set-value net.ipv4.ip_forward 1
-sysctl-set-value net.ipv4.tcp_congestion_control bbr
-sysctl-set-value net.ipv6.conf.all.disable_ipv6 0
-sysctl-set-value net.ipv6.conf.all.forwarding 1
-sysctl-set-value vm.overcommit_memory 1
+cat <<EOF > /etc/sysctl.d/99-kubelet.conf
+fs.inotify.max_user_instances = 8192
+fs.inotify.max_user_watches = 524288
+kernel.panic = 10
+kernel.panic_on_oops = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.conf.all.rp_filter = 0
+net.ipv4.ip_forward = 1
+net.ipv4.tcp_congestion_control = bbr
+net.ipv6.conf.all.disable_ipv6 = 0
+net.ipv6.conf.all.forwarding = 1
+vm.overcommit_memory = 1
+EOF
 
 # TODO: make sure no swap?
 

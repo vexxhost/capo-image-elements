@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+
+- hosts: all
+  tasks:
+    - name: Upload image
+      delegate_to: localhost
+      ansible.builtin.command: "scp -o StrictHostKeyChecking=accept-new {{ ansible_default_ipv4.address }}:{{ zuul.project.src_dir }}/image.qcow2 ubuntu@static.atmosphere.dev:/static/artifacts/magnum-cluster-api/{{ zuul.job.replace('capo-image-elements-promote-', '') }}-{{ ansible_date_time.epoch }}.qcow2"
