@@ -16,8 +16,6 @@ while [ ! -S /run/containerd/containerd.sock ]; do
     sleep 1
 done
 
-env
-
 # Pull all images
 kubeadm config images pull --kubernetes-version=${DIB_KUBERNETES_VERSION}
 
