@@ -40,6 +40,7 @@ systemctl enable containerd
 #                 OS that sets an extremely high open files limit, then you need to set
 #                 ulimit nofile to a more reasonable value.
 if [ -f /etc/redhat-release ]; then
+    install -d -o root -g root -m 755 /etc/systemd/system/containerd.service.d
     cat <<EOF > /etc/systemd/system/containerd.service.d/limits.conf
 [Service]
 LimitNOFILE=65536
