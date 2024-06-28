@@ -39,5 +39,10 @@ EOF
 
 # TODO: make sure no swap?
 
+# Disable firewalld on EL nodes
+if [ -f /etc/redhat-release ]; then
+    dnf remove -y firewalld
+fi
+
 # Enable service
 systemctl enable kubelet
