@@ -1,0 +1,26 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+set_value() {
+  local key=$1
+  local value=$2
+
+  if ! grep -q "^$key" /etc/ssh/sshd_config; then
+      echo "$key $value" >> /etc/ssh/sshd_config
+  else
+      sed -i "s/^$key.*/$key $value/" /etc/ssh/sshd_config
+  fi
+}
+
+set_value "Ciphers" "aes256-ctr,aes192-ctr"
+set_value "MACs" "hmac-sha2-512,hmac-sha2-256"
+set_value "KexAlgorithms" "diffie-hellman-group-exchange-sha256"
+set_value "HostKeyAlgorithms" "ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521"
+set_value "MaxAuthTries" "3"
