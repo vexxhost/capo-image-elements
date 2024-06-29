@@ -19,7 +19,8 @@
       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-30-2
 - job:
     files:
-    - ^elements/images/ubuntu/jammy/1-27-15.sh
+    - ^elements/
+    - images/ubuntu/jammy/1-27-15.sh
     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
     nodeset:
       nodes:
@@ -37,7 +38,8 @@
     post-run: playbooks/build/post.yaml
 - job:
     files:
-    - ^elements/images/ubuntu/jammy/1-28-11.sh
+    - ^elements/
+    - images/ubuntu/jammy/1-28-11.sh
     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
     nodeset:
       nodes:
@@ -55,7 +57,8 @@
     post-run: playbooks/build/post.yaml
 - job:
     files:
-    - ^elements/images/ubuntu/jammy/1-29-6.sh
+    - ^elements/
+    - images/ubuntu/jammy/1-29-6.sh
     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
     nodeset:
       nodes:
@@ -73,7 +76,8 @@
     post-run: playbooks/build/post.yaml
 - job:
     files:
-    - ^elements/images/ubuntu/jammy/1-30-2.sh
+    - ^elements/
+    - images/ubuntu/jammy/1-30-2.sh
     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
     nodeset:
       nodes:
