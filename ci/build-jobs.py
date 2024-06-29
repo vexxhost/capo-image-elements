@@ -30,6 +30,7 @@ def main():
                     "script": version_data,
                 },
                 "files": [
+                    "^elements/"
                     f"images/{os}/{release}/{version}.sh",
                 ],
                 "nodeset": {
