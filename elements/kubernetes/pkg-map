@@ -1,0 +1,7 @@
+{
+  "family": {
+    "redhat": {
+      "nfs-common": "nfs-utils"
+    }
+  }
+}
