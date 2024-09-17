@@ -4,7 +4,7 @@ import glob
 
 import yaml
 
-DISABLED_OS = ["rockylinux"]
+DISABLED_OS = []
 
 
 def main():

@@ -34,3 +34,15 @@ containerd config default > /etc/containerd/config.toml
 
 # Enable service
 systemctl enable containerd
+
+# NOTE(fitbeard): EL9 family distros set an astronomically large value for open
+#                 files (1073741816 vs 1048576). So, if you are running on a rpm-based
+#                 OS that sets an extremely high open files limit, then you need to set
+#                 ulimit nofile to a more reasonable value.
+if [ -f /etc/redhat-release ]; then
+    install -d -o root -g root -m 755 /etc/systemd/system/containerd.service.d
+    cat <<EOF > /etc/systemd/system/containerd.service.d/limits.conf
+[Service]
+LimitNOFILE=1048576
+EOF
+fi
