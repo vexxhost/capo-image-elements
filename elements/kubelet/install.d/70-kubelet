@@ -39,14 +39,11 @@ EOF
 
 # TODO: make sure no swap?
 
-# NOTE(fitbeard): Remove firewalld, nftables and switch to iptables-legacy on EL nodes.
-#
-# NOTE(fitbeard): Temporary use older iptables-libs until:
-#                 https://bugzilla.redhat.com/show_bug.cgi?id=2310158
+# NOTE(fitbeard): Install iptables-legacy and tune NetworkManager on EL nodes.
 if [ -f /etc/redhat-release ]; then
-    dnf remove -y firewalld iptables-nft nftables
-    dnf install -y https://dl.rockylinux.org/vault/rocky/9.4/BaseOS/x86_64/os/Packages/i/iptables-libs-1.8.10-2.el9.x86_64.rpm
-    dnf install -y iptables-legacy iptables-legacy-libs
+    dnf install -y iptables-legacy iptables-legacy-libs iptables-libs
+    nmcli connection migrate
+    sed -i '/^\(uuid\)=/d' /etc/NetworkManager/system-connections/*.nmconnection
 fi
 
 # Enable service
