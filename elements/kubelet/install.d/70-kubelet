@@ -39,5 +39,12 @@ EOF
 
 # TODO: make sure no swap?
 
+# NOTE(fitbeard): Install iptables-legacy and tune NetworkManager on EL nodes.
+if [ -f /etc/redhat-release ]; then
+    dnf install -y iptables-legacy iptables-legacy-libs iptables-libs
+    nmcli connection migrate
+    sed -i '/^\(uuid\)=/d' /etc/NetworkManager/system-connections/*.nmconnection
+fi
+
 # Enable service
 systemctl enable kubelet

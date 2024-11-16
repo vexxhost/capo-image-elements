@@ -5,3 +5,4 @@ kubeadm
 kubectl
 kubelet
 runc
+cloud-init-configs
