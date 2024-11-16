@@ -1,3 +1,2 @@
 curl:
 libseccomp2:
-  when: DISTRO_NAME == 'debian'
