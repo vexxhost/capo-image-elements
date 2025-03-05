@@ -5,4 +5,4 @@
 export ELEMENTS_PATH=$PWD/elements
 export DIB_RELEASE=jammy
 export DIB_KUBERNETES_VERSION=1.31.1
-disk-image-create vm ubuntu kubernetes
+disk-image-create vm block-device-gpt ubuntu kubernetes
