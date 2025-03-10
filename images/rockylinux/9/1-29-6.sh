@@ -4,4 +4,4 @@
 export ELEMENTS_PATH=$PWD/elements
 export DIB_RELEASE=9
 export DIB_KUBERNETES_VERSION=1.29.6
-disk-image-create vm block-device-gpt rocky-container kubernetes
+disk-image-create vm block-device-efi rocky-container kubernetes
