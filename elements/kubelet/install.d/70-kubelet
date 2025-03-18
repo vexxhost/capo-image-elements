@@ -29,7 +29,6 @@ kernel.panic = 10
 kernel.panic_on_oops = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.conf.all.rp_filter = 0
 net.ipv4.ip_forward = 1
 net.ipv4.tcp_congestion_control = bbr
 net.ipv6.conf.all.disable_ipv6 = 0
@@ -39,11 +38,12 @@ EOF
 
 # TODO: make sure no swap?
 
-# NOTE(fitbeard): Install iptables-legacy and tune NetworkManager on EL nodes.
+# Configure services on EL nodes
 if [ -f /etc/redhat-release ]; then
-    dnf install -y iptables-legacy iptables-legacy-libs iptables-libs
-    nmcli connection migrate
-    sed -i '/^\(uuid\)=/d' /etc/NetworkManager/system-connections/*.nmconnection
+    systemctl disable firewalld
+    systemctl disable conntrackd
+    systemctl enable chronyd
+    systemctl enable auditd
 fi
 
 # Enable service

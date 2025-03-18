@@ -5,6 +5,7 @@
       - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
       - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
       - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-31-1
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
@@ -16,6 +17,7 @@
       - capo-image-elements-build-rockylinux-9-kubernetes-1-28-11
       - capo-image-elements-build-rockylinux-9-kubernetes-1-29-6
       - capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-build-rockylinux-9-kubernetes-1-31-1
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
@@ -27,6 +29,7 @@
       - capo-image-elements-promote-rockylinux-9-kubernetes-1-28-11
       - capo-image-elements-promote-rockylinux-9-kubernetes-1-29-6
       - capo-image-elements-promote-rockylinux-9-kubernetes-1-30-2
+      - capo-image-elements-promote-rockylinux-9-kubernetes-1-31-1
       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-27-15
       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-28-11
       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-29-6
@@ -103,6 +106,24 @@
 - job:
     name: capo-image-elements-promote-rockylinux-9-kubernetes-1-30-2
     parent: capo-image-elements-build-rockylinux-9-kubernetes-1-30-2
+    post-run: playbooks/build/post.yaml
+- job:
+    files:
+    - images/rockylinux/9/1-31-1.sh
+    name: capo-image-elements-build-rockylinux-9-kubernetes-1-31-1
+    nodeset:
+      nodes:
+      - label: jammy-4c-16g
+        name: ubuntu-jammy
+    pre-run: playbooks/build/pre.yaml
+    run: playbooks/build/run.yaml
+    vars:
+      os: rockylinux
+      release: '9'
+      script: 1-31-1.sh
+- job:
+    name: capo-image-elements-promote-rockylinux-9-kubernetes-1-31-1
+    parent: capo-image-elements-build-rockylinux-9-kubernetes-1-31-1
     post-run: playbooks/build/post.yaml
 - job:
     files:

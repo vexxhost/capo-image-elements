@@ -1,7 +1,0 @@
-{
-  "family": {
-    "redhat": {
-      "libseccomp2": "libseccomp"
-    }
-  }
-}

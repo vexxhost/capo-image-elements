@@ -1,0 +1,14 @@
+conntrack:
+coreutils:
+curl:
+ebtables:
+ethtool:
+iproute2:
+iptables:
+kmod:
+libseccomp2:
+mount:
+nfs-common:
+socat:
+udev:
+util-linux:
