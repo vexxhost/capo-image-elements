@@ -1,8 +1,0 @@
-{
-  "family": {
-    "redhat": {
-      "iproute2": "iproute",
-      "mount": "util-linux"
-    }
-  }
-}

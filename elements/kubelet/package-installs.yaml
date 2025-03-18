@@ -1,9 +1,1 @@
-conntrack:
-coreutils:
 curl:
-ebtables:
-ethtool:
-iproute2:
-mount:
-socat:
-util-linux:
