@@ -9,7 +9,6 @@ iputils:
 jq:
 libseccomp:
 logrotate:
-nfs-utils:
 nftables:
 qemu-guest-agent:
 rsyslog:

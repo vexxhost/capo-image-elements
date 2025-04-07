@@ -1,5 +1,4 @@
 ebtables:
 iptables:
 libseccomp2:
-nfs-common:
 udev:
