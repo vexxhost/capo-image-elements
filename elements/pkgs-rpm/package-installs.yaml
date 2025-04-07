@@ -7,7 +7,6 @@ iptables-libs:
 iptables:
 iputils:
 jq:
-kmod:
 libseccomp:
 logrotate:
 nfs-utils:
