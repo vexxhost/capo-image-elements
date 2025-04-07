@@ -3,7 +3,6 @@ chrony:
 dhcp-client:
 iputils:
 jq:
-libseccomp:
 logrotate:
 nftables:
 qemu-guest-agent:
