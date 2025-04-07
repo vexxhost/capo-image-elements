@@ -7,4 +7,3 @@ nftables:
 qemu-guest-agent:
 rsyslog:
 selinux-policy-targeted:
-selinux-policy:
