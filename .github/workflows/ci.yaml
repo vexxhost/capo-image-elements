@@ -46,3 +46,9 @@ jobs:
           DIB_RELEASE: ${{ steps.split.outputs._1 }}
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
           DIB_MIN_TMPFS: "4"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
+          path: image.qcow2
+          if-no-files-found: error
+          retention-days: 7
