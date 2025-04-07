@@ -42,7 +42,7 @@ jobs:
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}
-      - run: uv run disk-image-create vm block-device-efi ${{ steps.split.outputs._0 }} ${{ steps.split.outputs._0 == 'rocky-container' && 'selinux-permissive epel pkgs-rpm cloud-init cloud-init-growpart' || '' }} kubernetes
+      - run: uv run disk-image-create vm block-device-efi ${{ steps.split.outputs._0 }} ${{ steps.split.outputs._0 == 'rocky-container' && 'selinux-permissive epel pkgs-rpm cloud-init' || '' }} kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._1 }}
