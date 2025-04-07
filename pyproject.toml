@@ -1,0 +1,8 @@
+[project]
+name = "capo-image-elements"
+version = "0.0.0"
+requires-python = ">=3.10"
+dependencies = [
+    "bindep>=2.13.0",
+    "diskimage-builder>=3.37.0",
+]
