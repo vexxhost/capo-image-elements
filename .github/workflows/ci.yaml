@@ -34,7 +34,7 @@ jobs:
           separator: "/"
       - uses: actions/cache@v4
         with:
-          path: /home/runner/.cache/dib
+          path: /home/runner/.cache/image-create
           key: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
           restore-keys: |
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
