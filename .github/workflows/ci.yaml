@@ -45,3 +45,4 @@ jobs:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._1 }}
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
+          DIB_MIN_TMPFS: "4"
