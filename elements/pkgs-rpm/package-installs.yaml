@@ -1,6 +1,5 @@
 audit:
 chrony:
-coreutils:
 curl:
 dhcp-client:
 ethtool:
