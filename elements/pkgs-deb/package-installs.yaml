@@ -4,5 +4,4 @@ iptables:
 kmod:
 libseccomp2:
 nfs-common:
-socat:
 udev:
