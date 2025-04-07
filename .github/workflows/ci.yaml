@@ -33,7 +33,7 @@ jobs:
           msg: ${{ matrix.os }}
           separator: "/"
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
-        if: ${{ steps.split.outputs._0 == "ubuntu" }}
+        if: ${{ steps.split.outputs._0 == 'ubuntu' }}
       - uses: actions/cache@v4
         with:
           path: /home/runner/.cache/image-create
