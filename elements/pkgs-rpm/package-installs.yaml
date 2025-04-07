@@ -1,6 +1,5 @@
 audit:
 chrony:
-curl:
 dhcp-client:
 iptables-legacy-libs:
 iptables-legacy:

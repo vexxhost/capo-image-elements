@@ -1,4 +1,3 @@
-curl:
 ebtables:
 iptables:
 kmod:
