@@ -1,10 +1,6 @@
 audit:
 chrony:
 dhcp-client:
-iptables-legacy-libs:
-iptables-legacy:
-iptables-libs:
-iptables:
 iputils:
 jq:
 libseccomp:

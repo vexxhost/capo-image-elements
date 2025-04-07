@@ -1,0 +1,7 @@
+{
+  "family": {
+    "redhat": {
+      "iptables": "iptables iptables-libs iptables-legacy iptables-legacy-libs"
+    }
+  }
+}

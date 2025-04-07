@@ -1,4 +1,3 @@
 ebtables:
-iptables:
 libseccomp2:
 udev:
