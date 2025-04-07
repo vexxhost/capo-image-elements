@@ -1,3 +1,5 @@
+audit:
+  when: DISTRO_NAME == 'rocky'
 chrony:
   when: DISTRO_NAME == 'rocky'
 conntrack:
