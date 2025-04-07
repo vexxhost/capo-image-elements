@@ -1,6 +1,5 @@
 audit:
 chrony:
-conntrack-tools:
 coreutils:
 curl:
 dhcp-client:
