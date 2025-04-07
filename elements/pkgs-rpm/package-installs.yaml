@@ -8,4 +8,3 @@ qemu-guest-agent:
 rsyslog:
 selinux-policy-targeted:
 selinux-policy:
-util-linux-core:
