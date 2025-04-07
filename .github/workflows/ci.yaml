@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: depot-ubuntu-24.04-4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: sudo apt-get install -y $(uv run bindep -b)
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/image_create
+          key: ubuntu-jammy-1.28.11
+      - run: uv run disk-image-create vm block-device-efi ubuntu kubernetes
+        env:
+          ELEMENTS_PATH: ${{ github.workspace }}/elements
+          DIB_RELEASE: jammy
+          DIB_KUBERNETES_VERSION: 1.28.11

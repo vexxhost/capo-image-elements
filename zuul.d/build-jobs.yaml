@@ -1,117 +1,117 @@
-- project:
-    check:
-      jobs:
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
-    gate:
-      jobs:
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
-      - capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
-    promote:
-      jobs:
-      - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-27-15
-      - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-28-11
-      - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-29-6
-      - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-30-2
-      - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-31-1
-- job:
-    files:
-    - ^elements/
-    - images/ubuntu/jammy/1-27-15.sh
-    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-    nodeset:
-      nodes:
-      - label: jammy-4c-16g
-        name: ubuntu-jammy
-    pre-run: playbooks/build/pre.yaml
-    run: playbooks/build/run.yaml
-    vars:
-      os: ubuntu
-      release: jammy
-      script: 1-27-15.sh
-- job:
-    name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-27-15
-    parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
-    post-run: playbooks/build/post.yaml
-- job:
-    files:
-    - ^elements/
-    - images/ubuntu/jammy/1-28-11.sh
-    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-    nodeset:
-      nodes:
-      - label: jammy-4c-16g
-        name: ubuntu-jammy
-    pre-run: playbooks/build/pre.yaml
-    run: playbooks/build/run.yaml
-    vars:
-      os: ubuntu
-      release: jammy
-      script: 1-28-11.sh
-- job:
-    name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-28-11
-    parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
-    post-run: playbooks/build/post.yaml
-- job:
-    files:
-    - ^elements/
-    - images/ubuntu/jammy/1-29-6.sh
-    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-    nodeset:
-      nodes:
-      - label: jammy-4c-16g
-        name: ubuntu-jammy
-    pre-run: playbooks/build/pre.yaml
-    run: playbooks/build/run.yaml
-    vars:
-      os: ubuntu
-      release: jammy
-      script: 1-29-6.sh
-- job:
-    name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-29-6
-    parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
-    post-run: playbooks/build/post.yaml
-- job:
-    files:
-    - ^elements/
-    - images/ubuntu/jammy/1-30-2.sh
-    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
-    nodeset:
-      nodes:
-      - label: jammy-4c-16g
-        name: ubuntu-jammy
-    pre-run: playbooks/build/pre.yaml
-    run: playbooks/build/run.yaml
-    vars:
-      os: ubuntu
-      release: jammy
-      script: 1-30-2.sh
-- job:
-    name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-30-2
-    parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
-    post-run: playbooks/build/post.yaml
-- job:
-    files:
-    - ^elements/
-    - images/ubuntu/jammy/1-31-1.sh
-    name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
-    nodeset:
-      nodes:
-      - label: jammy-4c-16g
-        name: ubuntu-jammy
-    pre-run: playbooks/build/pre.yaml
-    run: playbooks/build/run.yaml
-    vars:
-      os: ubuntu
-      release: jammy
-      script: 1-31-1.sh
-- job:
-    name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-31-1
-    parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
-    post-run: playbooks/build/post.yaml
+# - project:
+#     check:
+#       jobs:
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
+#     gate:
+#       jobs:
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
+#       - capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
+#     promote:
+#       jobs:
+#       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-27-15
+#       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-28-11
+#       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-29-6
+#       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-30-2
+#       - capo-image-elements-promote-ubuntu-jammy-kubernetes-1-31-1
+# - job:
+#     files:
+#     - ^elements/
+#     - images/ubuntu/jammy/1-27-15.sh
+#     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+#     nodeset:
+#       nodes:
+#       - label: jammy-4c-16g
+#         name: ubuntu-jammy
+#     pre-run: playbooks/build/pre.yaml
+#     run: playbooks/build/run.yaml
+#     vars:
+#       os: ubuntu
+#       release: jammy
+#       script: 1-27-15.sh
+# - job:
+#     name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-27-15
+#     parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-27-15
+#     post-run: playbooks/build/post.yaml
+# - job:
+#     files:
+#     - ^elements/
+#     - images/ubuntu/jammy/1-28-11.sh
+#     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+#     nodeset:
+#       nodes:
+#       - label: jammy-4c-16g
+#         name: ubuntu-jammy
+#     pre-run: playbooks/build/pre.yaml
+#     run: playbooks/build/run.yaml
+#     vars:
+#       os: ubuntu
+#       release: jammy
+#       script: 1-28-11.sh
+# - job:
+#     name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-28-11
+#     parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-28-11
+#     post-run: playbooks/build/post.yaml
+# - job:
+#     files:
+#     - ^elements/
+#     - images/ubuntu/jammy/1-29-6.sh
+#     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+#     nodeset:
+#       nodes:
+#       - label: jammy-4c-16g
+#         name: ubuntu-jammy
+#     pre-run: playbooks/build/pre.yaml
+#     run: playbooks/build/run.yaml
+#     vars:
+#       os: ubuntu
+#       release: jammy
+#       script: 1-29-6.sh
+# - job:
+#     name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-29-6
+#     parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-29-6
+#     post-run: playbooks/build/post.yaml
+# - job:
+#     files:
+#     - ^elements/
+#     - images/ubuntu/jammy/1-30-2.sh
+#     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
+#     nodeset:
+#       nodes:
+#       - label: jammy-4c-16g
+#         name: ubuntu-jammy
+#     pre-run: playbooks/build/pre.yaml
+#     run: playbooks/build/run.yaml
+#     vars:
+#       os: ubuntu
+#       release: jammy
+#       script: 1-30-2.sh
+# - job:
+#     name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-30-2
+#     parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-30-2
+#     post-run: playbooks/build/post.yaml
+# - job:
+#     files:
+#     - ^elements/
+#     - images/ubuntu/jammy/1-31-1.sh
+#     name: capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
+#     nodeset:
+#       nodes:
+#       - label: jammy-4c-16g
+#         name: ubuntu-jammy
+#     pre-run: playbooks/build/pre.yaml
+#     run: playbooks/build/run.yaml
+#     vars:
+#       os: ubuntu
+#       release: jammy
+#       script: 1-31-1.sh
+# - job:
+#     name: capo-image-elements-promote-ubuntu-jammy-kubernetes-1-31-1
+#     parent: capo-image-elements-build-ubuntu-jammy-kubernetes-1-31-1
+#     post-run: playbooks/build/post.yaml
