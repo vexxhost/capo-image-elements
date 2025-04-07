@@ -3,3 +3,4 @@ coreutils:
 curl:
 ethtool:
 iproute2:
+mount:

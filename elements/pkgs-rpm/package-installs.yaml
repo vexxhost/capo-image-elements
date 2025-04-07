@@ -19,4 +19,3 @@ selinux-policy-targeted:
 selinux-policy:
 socat:
 util-linux-core:
-util-linux:

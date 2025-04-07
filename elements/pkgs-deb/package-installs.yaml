@@ -3,8 +3,6 @@ ebtables:
 iptables:
 kmod:
 libseccomp2:
-mount:
 nfs-common:
 socat:
 udev:
-util-linux:
