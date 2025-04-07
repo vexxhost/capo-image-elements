@@ -18,8 +18,12 @@ jobs:
       - run: sudo apt-get install -y $(uv run bindep -b)
       - uses: actions/cache@v4
         with:
-          path: ~/.cache/image_create
-          key: ubuntu-jammy-1.28.11
+          path: ${{ runner.home }}/.cache/image_create
+          key: ubuntu-jammy-1.28.11-${{ github.head_ref || github.ref_name }}
+          restore-key: |
+            ubuntu-jammy-1.28.11-${{ github.head_ref || github.ref_name }}
+            ubuntu-jammy-1.28.11
+            ubuntu-jammy
       - run: uv run disk-image-create vm block-device-efi ubuntu kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
