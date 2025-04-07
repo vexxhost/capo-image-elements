@@ -1,5 +1,4 @@
 audit:
-chrony:
 dhcp-client:
 jq:
 logrotate:

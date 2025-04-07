@@ -1,3 +1,5 @@
+chrony:
+  when: DISTRO_NAME == 'rocky'
 conntrack:
 coreutils:
 curl:
