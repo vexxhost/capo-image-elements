@@ -3,6 +3,7 @@ cloud-init-growpart
 cni-plugins
 containerd
 cri-tools
+epel
 kubeadm
 kubectl
 kubelet
