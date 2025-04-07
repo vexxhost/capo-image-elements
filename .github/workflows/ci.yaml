@@ -13,7 +13,7 @@ jobs:
       matrix:
         os:
           - ubuntu/jammy
-          # - rockylinux/9
+          - rocky-container/9
         version:
           - 1.27.15
           - 1.28.11
