@@ -1,7 +1,6 @@
 audit:
 chrony:
 dhcp-client:
-iputils:
 jq:
 logrotate:
 nftables:
