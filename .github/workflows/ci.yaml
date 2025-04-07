@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: depot-ubuntu-24.04-4
+    runs-on: depot-ubuntu-24.04
     strategy:
       matrix:
         os:
           - ubuntu/jammy
-          - rockylinux/9
+          # - rockylinux/9
         version:
           - 1.27.15
           - 1.28.11
