@@ -1,7 +1,8 @@
 {
   "family": {
     "redhat": {
-      "conntrack": "conntrack-tools"
+      "conntrack": "conntrack-tools",
+      "iproute2": "iproute"
     }
   }
 }

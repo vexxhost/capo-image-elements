@@ -1,6 +1,5 @@
 curl:
 ebtables:
-iproute2:
 iptables:
 kmod:
 libseccomp2:
