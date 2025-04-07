@@ -1,6 +1,8 @@
 conntrack:
 coreutils:
 curl:
+ebtables:
+  when: DISTRO_NAME == 'debian'
 ethtool:
 iproute2:
 mount:
