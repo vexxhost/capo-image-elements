@@ -1,3 +1,4 @@
 conntrack:
 coreutils:
 curl:
+ethtool:

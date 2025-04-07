@@ -1,6 +1,5 @@
 curl:
 ebtables:
-ethtool:
 iproute2:
 iptables:
 kmod:

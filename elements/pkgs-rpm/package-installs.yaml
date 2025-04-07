@@ -2,7 +2,6 @@ audit:
 chrony:
 curl:
 dhcp-client:
-ethtool:
 iproute:
 iptables-legacy-libs:
 iptables-legacy:
