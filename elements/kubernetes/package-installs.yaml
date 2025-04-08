@@ -7,8 +7,6 @@ logrotate:
   when: DISTRO_NAME == 'rocky'
 nftables:
   when: DISTRO_NAME == 'rocky'
-qemu-guest-agent:
-  when: DISTRO_NAME == 'rocky'
 rsyslog:
   when: DISTRO_NAME == 'rocky'
 selinux-policy-targeted:
