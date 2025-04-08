@@ -44,6 +44,12 @@ if [ -f /etc/redhat-release ]; then
     systemctl disable conntrackd
     systemctl enable chronyd
     systemctl enable auditd
+
+    # NOTE(mnaser): `diskimage-builder` does not support conditional
+    #               element dependencies, so we cannot use the
+    #               `selinux-permissive` element.
+    echo "SELINUX=permissive" > /etc/selinux/config
+    echo "SELINUXTYPE=targeted" >> /etc/selinux/config
 fi
 
 # Enable service
