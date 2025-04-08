@@ -1,7 +1,0 @@
-dhcp-client:
-jq:
-logrotate:
-nftables:
-qemu-guest-agent:
-rsyslog:
-selinux-policy-targeted:
