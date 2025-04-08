@@ -3,8 +3,6 @@ nfs-common:
 #               so we should clean them up later.
 dhcp-client:
   when: DISTRO_NAME == 'rocky'
-jq:
-  when: DISTRO_NAME == 'rocky'
 logrotate:
   when: DISTRO_NAME == 'rocky'
 nftables:
