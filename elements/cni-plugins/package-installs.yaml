@@ -3,4 +3,4 @@ curl:
 iptables:
 kmod:
 udev:
-  when: DISTRO_NAME == debian
+  when: DISTRO_NAME = debian

@@ -2,12 +2,12 @@ nfs-common:
 # NOTE(mnaser): Some of these packages might not be needed
 #               so we should clean them up later.
 dhcp-client:
-  when: DISTRO_NAME == rocky
+  when: DISTRO_NAME = rocky
 logrotate:
-  when: DISTRO_NAME == rocky
+  when: DISTRO_NAME = rocky
 nftables:
-  when: DISTRO_NAME == rocky
+  when: DISTRO_NAME = rocky
 rsyslog:
-  when: DISTRO_NAME == rocky
+  when: DISTRO_NAME = rocky
 selinux-policy-targeted:
-  when: DISTRO_NAME == rocky
+  when: DISTRO_NAME = rocky
