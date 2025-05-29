@@ -1,0 +1,8 @@
+{
+  "family": {
+    "redhat": {
+      "arping": "iputils",
+      "iptables": "iptables iptables-libs iptables-legacy iptables-legacy-libs"
+    }
+  }
+}

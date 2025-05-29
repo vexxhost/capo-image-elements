@@ -1,9 +1,11 @@
+chrony:
+  when: DISTRO_NAME = rocky
 conntrack:
 coreutils:
 curl:
 ebtables:
+  when: DISTRO_NAME = debian
 ethtool:
 iproute2:
 mount:
 socat:
-util-linux:

@@ -29,7 +29,6 @@ kernel.panic = 10
 kernel.panic_on_oops = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.conf.all.rp_filter = 0
 net.ipv4.ip_forward = 1
 net.ipv4.tcp_congestion_control = bbr
 net.ipv6.conf.all.disable_ipv6 = 0
@@ -38,6 +37,20 @@ vm.overcommit_memory = 1
 EOF
 
 # TODO: make sure no swap?
+
+# Configure services on EL nodes
+if [ -f /etc/redhat-release ]; then
+    systemctl disable firewalld
+    systemctl disable conntrackd
+    systemctl enable chronyd
+    systemctl enable auditd
+
+    # NOTE(mnaser): `diskimage-builder` does not support conditional
+    #               element dependencies, so we cannot use the
+    #               `selinux-permissive` element.
+    echo "SELINUX=permissive" > /etc/selinux/config
+    echo "SELINUXTYPE=targeted" >> /etc/selinux/config
+fi
 
 # Enable service
 systemctl enable kubelet

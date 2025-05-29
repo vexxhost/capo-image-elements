@@ -1,4 +1,6 @@
+arping:
 curl:
 iptables:
 kmod:
 udev:
+  when: DISTRO_NAME = debian

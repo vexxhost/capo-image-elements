@@ -1,6 +1,7 @@
 {
   "family": {
     "redhat": {
+      "conntrack": "conntrack-tools",
       "iproute2": "iproute",
       "mount": "util-linux"
     }
