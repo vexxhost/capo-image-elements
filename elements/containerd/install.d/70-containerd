@@ -39,6 +39,7 @@ systemctl enable containerd
 #                 files (1073741816 vs 1048576). So, if you are running on a rpm-based
 #                 OS that sets an extremely high open files limit, then you need to set
 #                 ulimit nofile to a more reasonable value.
+# NOTE(fitbeard): Set this as default in a future: https://github.com/containerd/containerd/pull/8924
 if [ -f /etc/redhat-release ]; then
     install -d -o root -g root -m 755 /etc/systemd/system/containerd.service.d
     cat <<EOF > /etc/systemd/system/containerd.service.d/limits.conf
