@@ -12,28 +12,29 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu/jammy
-          - rocky-container/9
+          - ubuntu/noble
         version:
-          - 1.27.15
-          - 1.28.11
-          - 1.29.6
-          - 1.30.2
-          - 1.31.1
+          - 1.33.1
     steps:
       - uses: actions/checkout@v4
+
       - uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+
       - run: uv sync
+
       - run: sudo apt-get install -y $(uv run bindep -b)
+
       - uses: winterjung/split@7f51d99e7cc1f147f6f99be75acf5e641930af88 # v2.1.0
         id: split
         with:
           msg: ${{ matrix.os }}
           separator: "/"
+
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
         if: ${{ steps.split.outputs._0 == 'ubuntu' }}
+
       - uses: actions/cache@v4
         with:
           path: /home/runner/.cache/image-create
@@ -42,15 +43,24 @@ jobs:
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}
+
       - run: uv run disk-image-create vm block-device-efi ${{ steps.split.outputs._0 }} kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._1 }}
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
           DIB_MIN_TMPFS: "4"
-      - uses: actions/upload-artifact@v4
+
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
           path: image.qcow2
           if-no-files-found: error
           retention-days: 7
+
+      - name: Upload image to release
+        uses: softprops/action-gh-release@v1
+        if: github.ref_type == "tag"
+        with:
+          files: image.qcow2
