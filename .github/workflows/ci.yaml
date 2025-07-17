@@ -15,11 +15,13 @@ jobs:
           - ubuntu/jammy
           - rocky-container/9
         version:
-          - 1.27.15
-          - 1.28.11
-          - 1.29.6
-          - 1.30.2
+          - 1.27.16
+          - 1.28.15
+          - 1.29.15
+          - 1.30.14
           - 1.31.11
+          - 1.32.7
+          - 1.33.3
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
