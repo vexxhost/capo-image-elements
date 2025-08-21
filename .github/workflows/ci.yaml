@@ -63,7 +63,7 @@ jobs:
           retention-days: 7
       - run: xz -z image.qcow2
         if: github.event_name != 'pull_request'
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2
         if: github.event_name != 'pull_request'
         with:
           tag_name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}
