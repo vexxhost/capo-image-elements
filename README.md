@@ -12,6 +12,13 @@ These images were primarily built to be consumed by the
 however, they will likely generate `qcow2` images that should work directly
 with the Cluster API provider for OpenStack.
 
+## Releases
+
+### Automatic updates
+
+This repository runs nightly updates to grab the latest maintained Kubernetes versions
+and creates a pull request to update the versions in the CI workflow.
+
 ## Building the images
 
 To build the images, you will need to have `diskimage-builder` installed. You
