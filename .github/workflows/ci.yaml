@@ -1,6 +1,7 @@
 name: ci
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches:
@@ -53,3 +54,10 @@ jobs:
           path: image.qcow2
           if-no-files-found: error
           retention-days: 7
+      - uses: softprops/action-gh-release@v2
+        if: github.event_name != 'pull_request'
+        with:
+          tag_name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}
+          generate_release_notes: true
+          prerelease: true
+          files: image.qcow2
