@@ -1,0 +1,30 @@
+name: bump
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  kubernetes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.VEXXHOST_BOT_PAT }}
+      - run: ./hack/bump/kubernetes.sh
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.VEXXHOST_BOT_PAT }}
+          commit-message: "chore(deps): update kubernetes"
+          title: "chore(deps): update kubernetes"
+          body: |
+            ## Automated Kubernetes Version Update
+            This PR updates the Kubernetes versions in the CI workflow to the latest maintained versions.
+            Source: https://endoflife.date/kubernetes
+          delete-branch: true
+          branch: bump/kubernetes
