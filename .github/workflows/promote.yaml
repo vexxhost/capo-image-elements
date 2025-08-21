@@ -12,3 +12,7 @@ jobs:
     steps:
       - uses: gophercloud/devstack-action@v0.19
       - uses: mxschmitt/action-tmate@v3
+      # TODO: create kind cluster
+      # TODO: install capi/capo
+      # TODO: create cluster with image
+      # TODO: if cluster is up and nodes are ready, promote image
