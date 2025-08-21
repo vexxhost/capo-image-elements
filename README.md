@@ -40,7 +40,7 @@ exporting the `ELEMENTS_PATH` and running the following command:
 ```shell
 export ELEMENTS_PATH=$PWD/elements
 export DIB_RELEASE=jammy
-export DIB_KUBERNETES_VERSION=1.27.15
+export DIB_KUBERNETES_VERSION=1.33.4
 disk-image-create vm ubuntu kubernetes
 ```
 
