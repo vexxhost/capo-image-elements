@@ -57,10 +57,17 @@ jobs:
           path: image.qcow2
           if-no-files-found: error
           retention-days: 7
+      - run: xz -z image.qcow2
+        if: github.event_name != 'pull_request'
       - uses: softprops/action-gh-release@v2
         if: github.event_name != 'pull_request'
         with:
           tag_name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}
-          generate_release_notes: true
+          body: |
+            # Kubernetes ${{ matrix.version }}
+
+            - SHA: `${{ github.sha }}`
+            - OS: `${{ steps.split.outputs._0 }}`
+            - Release: `${{ steps.split.outputs._1 }}`
           prerelease: true
-          files: image.qcow2
+          files: image.qcow2.xz
