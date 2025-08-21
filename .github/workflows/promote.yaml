@@ -2,17 +2,38 @@ name: promote
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '*'
+  # push:
+  #   tags:
+  #     - '*'
 
 jobs:
   devstack:
     runs-on: ubuntu-latest
     steps:
       - uses: gophercloud/devstack-action@v0.19
+        with:
+          enable_workaround_docker_io: false
+      - run: sudo iptables -I DOCKER-USER -j ACCEPT
+      - run: |
+          kind create cluster
+          kubectl version
+      - run: |
+          curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.10.4/clusterctl-linux-amd64 -o clusterctl
+          sudo install -o root -g root -m 0755 clusterctl /usr/local/bin/clusterctl
+          clusterctl version
+      - run: clusterctl init --infrastructure openstack
+        env:
+          CLUSTER_TOPOLOGY: "true"
+          EXP_CLUSTER_RESOURCE_SET: "true"
+      - run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
+      - run: curl -L https://github.com/vexxhost/capo-image-elements/releases/download/ubuntu-jammy-1.33.4-17134952700/image.qcow2.xz | xz -d > /tmp/image.qcow2
+      - run: |
+          openstack image create --disk-format qcow2 --file /tmp/image.qcow2 image-under-test
+          openstack keypair create --public-key ~/.ssh/id_rsa.pub runner
+        env:
+          OS_CLOUD: devstack
+      # TODO: create cluster
+      # TODO: install ccm+cni
+      # TODO: ensure cluster goes ready
+      # TODO: promote release
       - uses: mxschmitt/action-tmate@v3
-      # TODO: create kind cluster
-      # TODO: install capi/capo
-      # TODO: create cluster with image
-      # TODO: if cluster is up and nodes are ready, promote image
