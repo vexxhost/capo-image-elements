@@ -1,0 +1,14 @@
+name: promote
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '.*'
+
+jobs:
+  devstack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: gophercloud/devstack-action@v0.19
+      - uses: mxschmitt/action-tmate@v3
