@@ -21,6 +21,7 @@ jobs:
         with:
           token: ${{ secrets.VEXXHOST_BOT_PAT }}
           commit-message: "chore(deps): update kubernetes"
+          signoff: true
           title: "chore(deps): update kubernetes"
           body: |
             ## Automated Kubernetes Version Update
