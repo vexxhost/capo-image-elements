@@ -15,7 +15,7 @@ jobs:
     runs-on: depot-ubuntu-24.04
     concurrency:
       group: build-${{ github.ref }}-${{ matrix.os }}-${{ matrix.version }}
-      cancel-in-progress: false
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
