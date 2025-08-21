@@ -23,8 +23,8 @@ jobs:
           - 1.32.7
           - 1.33.3
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+      - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5
         with:
           enable-cache: true
       - run: uv sync
@@ -36,7 +36,7 @@ jobs:
           separator: "/"
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
         if: ${{ steps.split.outputs._0 == 'ubuntu' }}
-      - uses: actions/cache@v4
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         with:
           path: /home/runner/.cache/image-create
           key: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
@@ -51,7 +51,7 @@ jobs:
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
           path: image.qcow2
