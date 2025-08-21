@@ -32,7 +32,7 @@ jobs:
           separator: "/"
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
         if: ${{ steps.split.outputs._0 == 'ubuntu' }}
-      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: /home/runner/.cache/image-create
           key: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
