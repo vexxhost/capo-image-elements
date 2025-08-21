@@ -29,7 +29,7 @@ jobs:
       - run: curl -L https://github.com/vexxhost/capo-image-elements/releases/download/ubuntu-jammy-1.33.4-17134952700/image.qcow2.xz | xz -d > /tmp/image.qcow2
       - run: |
           openstack image create --disk-format qcow2 --file /tmp/image.qcow2 image-under-test
-          openstack keypair create --public-key ~/.ssh/id_rsa.pub runner
+          openstack keypair create --private-key ~/.ssh/id_ed25519 runner
         env:
           OS_CLOUD: devstack
       # TODO: create cluster
@@ -37,3 +37,4 @@ jobs:
       # TODO: ensure cluster goes ready
       # TODO: promote release
       - uses: mxschmitt/action-tmate@v3
+        if: ${{ failure() }}
