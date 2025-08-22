@@ -1,4 +1,5 @@
 cloud-init
+cloud-init-datasources
 cloud-init-growpart
 cni-plugins
 containerd
