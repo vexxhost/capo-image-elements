@@ -25,6 +25,12 @@ Upon every merge to the main branch, a new pre-release image will be built and p
 as a GitHub pre-release.  In addition, contributors of this repository are able to trigger
 builds by using the workflow dispatch trigger.
 
+### Release images
+
+Once a pre-release is created, a CI workflow will start up a DevStack instance with the
+Cluster API provider for OpenStack, spin up a cluster with this image and ensure that
+it can spin up a cluster successfully.
+
 ## Building the images
 
 To build the images, you will need to have `diskimage-builder` installed. You

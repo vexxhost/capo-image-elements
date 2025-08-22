@@ -2,70 +2,133 @@ name: promote
 
 on:
   workflow_dispatch:
-  # push:
-  #   tags:
-  #     - '*'
+  push:
+    tags:
+      - '*'
 
 jobs:
   devstack:
     runs-on: ubuntu-latest
     steps:
-      - uses: gophercloud/devstack-action@v0.19
+      - name: Deploy OpenStack cloud
+        uses: gophercloud/devstack-action@v0.19
         with:
           enable_workaround_docker_io: false
-      - run: sudo iptables -I DOCKER-USER -j ACCEPT
-      - run: |
+
+      - name: Allow Docker traffic
+        run: sudo iptables -I DOCKER-USER -j ACCEPT
+
+      - name: Create KinD cluster
+        run: |
           kind create cluster
           kubectl version
-      - run: |
+
+      - name: Install "clusterctl"
+        run: |
           curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.10.4/clusterctl-linux-amd64 -o clusterctl
           sudo install -o root -g root -m 0755 clusterctl /usr/local/bin/clusterctl
           clusterctl version
-      - run: clusterctl init --infrastructure openstack
+
+      - name: Install Cluster API provider for OpenStack
+        run: clusterctl init --infrastructure openstack
         env:
           CLUSTER_TOPOLOGY: "true"
           EXP_CLUSTER_RESOURCE_SET: "true"
-      - run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
-      - run: curl -L https://github.com/vexxhost/capo-image-elements/releases/download/ubuntu-jammy-1.33.4-17134952700/image.qcow2.xz | xz -d > /tmp/image.qcow2
-      - run: |
+
+      - name: Install OpenStack Resource Controller
+        run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
+
+      - name: Download & load image under test
+        run: |
+          curl -L https://github.com/vexxhost/capo-image-elements/releases/download/${{ github.ref_name }}/image.qcow2.xz | xz -d > /tmp/image.qcow2
           openstack image create --disk-format qcow2 --file /tmp/image.qcow2 image-under-test
+          rm -rfv /tmp/image.qcow2
+        env:
+          OS_CLOUD: devstack
+
+      - name: Create SSH keypair
+        run: |
           openstack keypair create --private-key id_ed25519 runner
         env:
           OS_CLOUD: devstack
-      # - run: |
-      #     export OPENSTACK_CLOUD_YAML_B64=$(cat /etc/openstack/clouds.yaml | base64 -w0)
-      #     export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
-      #     clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml test | kubectl apply -f -
-      #   env:
-      #     OS_CLOUD: "devstack"
-      #     KUBERNETES_VERSION: "1.33.4"
-      #     OPENSTACK_CLOUD_CACERT_B64: ""
-      #     OPENSTACK_CLOUD: "devstack"
-      #     OPENSTACK_DNS_NAMESERVERS: "1.1.1.1"
-      #     OPENSTACK_FAILURE_DOMAIN: "nova"
-      #     OPENSTACK_CONTROL_PLANE_MACHINE_FLAVOR: "ds2G"
-      #     OPENSTACK_NODE_MACHINE_FLAVOR: "ds2G"
-      #     OPENSTACK_IMAGE_NAME: "image-under-test"
-      #     OPENSTACK_SSH_KEY_NAME: "runner"
-      # TODO: wait for kube api to start responding
-      # - run: |
-      #     clusterctl get kubeconfig test > /tmp/kubeconfig
-      #     cat <<EOF | kubectl create secret -n kube-system generic cloud-config --from-file=cloud.conf=/dev/stdin
-      #     [Global]
-      #     auth-url=$(yq '.clouds.devstack.auth.auth_url' /etc/openstack/clouds.yaml)/v3
-      #     username=demo
-      #     password=secret
-      #     region=RegionOne
-      #     tenant-name=demo
-      #     domain-name=default
-      #     EOF
-      #     kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/cloud-controller-manager-roles.yaml
-      #     kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/cloud-controller-manager-role-bindings.yaml
-      #     kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
-      #   env:
-      #     KUBECONFIG: /tmp/kubeconfig
-      # TODO: install ccm+cni
-      # TODO: ensure cluster goes ready
-      # TODO: promote release
-      - uses: owenthereal/action-upterm@v1
-        if: ${{ always() }}
+
+      - name: Deploy Kubernetes cluster
+        run: |
+          export OPENSTACK_CLOUD_YAML_B64=$(cat /etc/openstack/clouds.yaml | base64 -w0)
+          export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
+          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
+        env:
+          OS_CLOUD: "devstack"
+          KUBERNETES_VERSION: "1.33.4"
+          OPENSTACK_CLOUD_CACERT_B64: ""
+          OPENSTACK_CLOUD: "devstack"
+          OPENSTACK_DNS_NAMESERVERS: "1.1.1.1"
+          OPENSTACK_FAILURE_DOMAIN: "nova"
+          OPENSTACK_CONTROL_PLANE_MACHINE_FLAVOR: "ds2G"
+          OPENSTACK_NODE_MACHINE_FLAVOR: "ds2G"
+          OPENSTACK_IMAGE_NAME: "image-under-test"
+          OPENSTACK_SSH_KEY_NAME: "runner"
+
+      - name: Wait for control plane to initialize
+        run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=120s cluster/test
+
+      - name: Get workload cluster KUBECONFIG
+        run: clusterctl get kubeconfig test > /tmp/kubeconfig
+
+      - name: Install OpenStack cloud controller manager
+        run: |
+          helm repo add cpo https://kubernetes.github.io/cloud-provider-openstack
+          helm repo update
+          cat <<EOF | helm upgrade --install --namespace kube-system openstack-ccm cpo/openstack-cloud-controller-manager --values /dev/stdin
+          tolerations:
+            - key: node.cloudprovider.kubernetes.io/uninitialized
+              value: "true"
+              effect: NoSchedule
+            - key: node-role.kubernetes.io/control-plane
+              effect: NoSchedule
+            - key: node.kubernetes.io/not-ready
+              effect: NoSchedule
+          enabledControllers:
+            - cloud-node
+            - cloud-node-lifecycle
+          cloudConfig:
+            global:
+              auth-url: $(yq '.clouds.devstack.auth.auth_url' /etc/openstack/clouds.yaml)/v3
+              username: demo
+              password: secret
+              region: RegionOne
+              tenant-name: demo
+              domain-name: default
+          EOF
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Install Cilium
+        run: |
+          CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+          CLI_ARCH=amd64
+          if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+          curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+          sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+          sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+          rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+          cilium install
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Wait for all nodes to be ready
+        run: kubectl wait --for=condition=Ready nodes --all --timeout=5m
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Promote the release
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
+        with:
+          tag_name: ${{ github.ref_name }}
+          prerelease: false
+
+      - name: Start CI debugging on failures
+        uses: owenthereal/action-upterm@v1
+        if: ${{ failure() }}
+        with:
+          wait-timeout-minutes: 5
