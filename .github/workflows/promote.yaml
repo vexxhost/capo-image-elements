@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy OpenStack cloud
-        uses: gophercloud/devstack-action@v0.19
+        uses: gophercloud/devstack-action@60ca1042045c0c9e3e001c64575d381654ffcba1 # v0.19
         with:
           enable_workaround_docker_io: false
 
