@@ -7,9 +7,6 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
 jobs:
   build:
     runs-on: depot-ubuntu-24.04
@@ -28,6 +25,8 @@ jobs:
           - 1.33.4
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          token: ${{ secrets.VEXXHOST_BOT_PAT }}
       - uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86 # v5.4.2
         with:
           enable-cache: true
@@ -75,3 +74,4 @@ jobs:
             - Release: `${{ steps.split.outputs._1 }}`
           prerelease: true
           files: image.qcow2.xz
+          token: ${{ secrets.VEXXHOST_BOT_PAT }}
