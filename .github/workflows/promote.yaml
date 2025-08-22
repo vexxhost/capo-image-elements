@@ -6,6 +6,10 @@ on:
     tags:
       - '*'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   devstack:
     runs-on: ubuntu-latest
