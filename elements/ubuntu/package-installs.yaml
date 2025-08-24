@@ -1,0 +1,10 @@
+linux-image-generic:
+# NODE(fitbeard): Uninstalling 'linux-firmware' and 'snapd'
+#.                packages saves 400Mb of final image size.
+linux-firmware:
+    uninstall: true
+snapd:
+    uninstall: true
+# NOTE(fitbeard): 'diskimage-builder' does not support conditional element dependencies,
+#                  so we use this fork of original 'ubuntu' element with removed 'dkms'
+#                  element from dependency list. This alone saves us 200Mb from final image size.

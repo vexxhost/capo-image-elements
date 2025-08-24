@@ -1,0 +1,8 @@
+systemd-networkd:
+systemd-resolved:
+# NOTE(fitbeard): We don't need cockpit at all:
+#                 https://github.com/rocky-linux/kickstarts/blob/r9/Rocky-9-GenericCloud-Base.ks
+cockpit-ws:
+    uninstall: true
+cockpit-system:
+    uninstall: true

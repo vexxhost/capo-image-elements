@@ -1,10 +1,9 @@
-chrony:
-  when: DISTRO_NAME = rocky
 conntrack:
 coreutils:
 curl:
+# NODE(fitbeard): For Rocky Linux 9 EPEL repository must be enabled first.
+#                 Map of packages from this repo can be found in 'pkg-map' config.
 ebtables:
-  when: DISTRO_NAME = debian
 ethtool:
 iproute2:
 mount:
