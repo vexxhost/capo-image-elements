@@ -1,5 +1,4 @@
 cloud-init
-cloud-init-datasources
 cloud-init-growpart
 cni-plugins
 containerd
@@ -8,4 +7,5 @@ epel
 kubeadm
 kubectl
 kubelet
+openssh-server
 runc

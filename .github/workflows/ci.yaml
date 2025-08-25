@@ -17,8 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu/jammy
-          - rocky/9
+          - ubuntu-minimal/jammy
+          - rocky-container/9
         version:
           - 1.31.12
           - 1.32.8
