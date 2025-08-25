@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu/jammy
+          - ubuntu-minimal/jammy
           - rocky-container/9
         version:
           - 1.31.12
@@ -54,13 +54,14 @@ jobs:
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
+          DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
           path: image.qcow2
           if-no-files-found: error
           retention-days: 7
-      - run: xz -c image.qcow2 > ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2.xz
+      - run: mv image.qcow2 ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
         if: github.event_name != 'pull_request'
       - uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
         if: github.event_name != 'pull_request'
@@ -73,5 +74,5 @@ jobs:
             - OS: `${{ steps.split.outputs._0 }}`
             - Release: `${{ steps.split.outputs._1 }}`
           prerelease: true
-          files: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2.xz
+          files: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
           token: ${{ secrets.VEXXHOST_BOT_PAT }}

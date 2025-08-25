@@ -1,0 +1,34 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+if [ -f /etc/redhat-release ]; then
+    # NOTE(fitbeard): Replace NetworkManager with systemd-networkd
+    systemctl mask NetworkManager
+    systemctl mask NetworkManager-wait-online
+    systemctl enable systemd-networkd
+    systemctl enable systemd-resolved
+    ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+    cat <<EOF > /etc/cloud/cloud.cfg.d/10_systemd-networkd.cfg
+system_info:
+  network:
+    renderers: ['networkd']
+    activators: ['networkd']
+EOF
+
+    # NOTE(fitbeard): From https://github.com/rocky-linux/kickstarts/blob/r9/Rocky-9-GenericCloud-Base.ks
+    if ! grep -q growpart /etc/cloud/cloud.cfg; then
+      sed -i 's/ - resizefs/ - growpart\n - resizefs/' /etc/cloud/cloud.cfg
+    fi
+
+    sed -i '1i # Modified for cloud image' /etc/cloud/cloud.cfg
+    echo -e 'rocky\tALL=(ALL)\tNOPASSWD: ALL' >> /etc/sudoers
+    sed -i 's/name: cloud-user/name: rocky/g' /etc/cloud/cloud.cfg
+fi

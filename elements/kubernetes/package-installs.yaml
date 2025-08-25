@@ -1,13 +1,19 @@
-nfs-common:
-# NOTE(mnaser): Some of these packages might not be needed
-#               so we should clean them up later.
-dhcp-client:
-  when: DISTRO_NAME = rocky
+# NOTE(fitbeard): We don't need cockpit on Rocky Linux.
+cockpit-ws:
+    uninstall: true
+    when: DISTRO_NAME = rocky
+cockpit-system:
+    uninstall: true
+    when: DISTRO_NAME = rocky
+# NOTE(fitbeard): Uninstalling 'linux-firmware' package
+#                 saves 400Mb of final image size.
+linux-firmware:
+    uninstall: true
 logrotate:
-  when: DISTRO_NAME = rocky
-nftables:
-  when: DISTRO_NAME = rocky
+nfs-common:
 rsyslog:
+# NOTE(fitbeard): Replace Networkmanager with systemd-networkd
+systemd-networkd:
   when: DISTRO_NAME = rocky
-selinux-policy-targeted:
+systemd-resolved:
   when: DISTRO_NAME = rocky

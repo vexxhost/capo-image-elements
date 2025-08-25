@@ -40,14 +40,16 @@ EOF
 
 # Configure services on EL nodes
 if [ -f /etc/redhat-release ]; then
-    systemctl disable firewalld
+    # NOTE(fitbeard): Remove wireless drivers and mask firewalld
+    dnf -C -y remove iwl\*
+    systemctl mask firewalld
     systemctl disable conntrackd
     systemctl enable chronyd
     systemctl enable auditd
 
-    # NOTE(mnaser): `diskimage-builder` does not support conditional
+    # NOTE(mnaser): 'diskimage-builder' does not support conditional
     #               element dependencies, so we cannot use the
-    #               `selinux-permissive` element.
+    #               'selinux-permissive' element.
     echo "SELINUX=permissive" > /etc/selinux/config
     echo "SELINUXTYPE=targeted" >> /etc/selinux/config
 fi
