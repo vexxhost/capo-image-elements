@@ -63,7 +63,6 @@ jobs:
           clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
         env:
           OS_CLOUD: "devstack"
-          KUBERNETES_VERSION: "1.34.0"
           OPENSTACK_CLOUD_CACERT_B64: ""
           OPENSTACK_CLOUD: "devstack"
           OPENSTACK_DNS_NAMESERVERS: "1.1.1.1"
