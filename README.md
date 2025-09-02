@@ -46,9 +46,13 @@ exporting the `ELEMENTS_PATH` and running the following command:
 ```shell
 export ELEMENTS_PATH=$PWD/elements
 export DIB_RELEASE=jammy
+export DIB_CLOUD_INIT_GROWPART_DEVICES="/"
+export DIB_SKIP_BASE_PACKAGE_INSTALL=1
 export DIB_KUBERNETES_VERSION=1.34.0
-disk-image-create vm ubuntu kubernetes
+disk-image-create vm block-device-efi ubuntu-minimal kubernetes
 ```
+
+For Rocky Linux variant, `DIB_RELEASE` should be changed to `9` and the `ubuntu-minimal` element to `rocky-container`.
 
 You can add any other elements that you require for your image by adding them
 to the command.

@@ -60,10 +60,11 @@ jobs:
         run: |
           export OPENSTACK_CLOUD_YAML_B64=$(cat /etc/openstack/clouds.yaml | base64 -w0)
           export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
+          export KUBERNETES_VERSION=$(echo "${{ github.ref_name }}" | sed -n 's/.*-\([0-9]\+\.[0-9]\+\.[0-9]\+\)-.*/\1/p')
+          echo "Using KUBERNETES_VERSION=${KUBERNETES_VERSION}"
           clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
         env:
           OS_CLOUD: "devstack"
-          KUBERNETES_VERSION: "1.33.4"
           OPENSTACK_CLOUD_CACERT_B64: ""
           OPENSTACK_CLOUD: "devstack"
           OPENSTACK_DNS_NAMESERVERS: "1.1.1.1"
