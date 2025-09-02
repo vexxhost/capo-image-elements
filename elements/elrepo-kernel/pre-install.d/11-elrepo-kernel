@@ -8,8 +8,8 @@ fi
 set -eu
 set -o pipefail
 
-# NOTE(fitbeard): Install newer mainline stable kernel
+# NOTE(fitbeard): Install newer kernel
 if [ -f /etc/redhat-release ]; then
     dnf install -y elrepo-release
-    dnf --enablerepo=elrepo-kernel install -y kernel-ml
+    dnf --enablerepo=elrepo-kernel install -y kernel-${DIB_ELREPO_KERNEL_TYPE}
 fi
