@@ -32,7 +32,11 @@ install -d -o root -g root -m 711 /run/containerd
 # Create containerd config file
 containerd config default > /etc/containerd/config.toml
 
-# Ensure SystemdCgroup is enabled.
+# NOTE(fitbeard): Disable unused snapshotters.
+#                 These plugins also prevent 'containerd' from running without proper configuration.
+sed -i 's|^disabled_plugins.*|disabled_plugins = ["io.containerd.snapshotter.v1.btrfs","io.containerd.snapshotter.v1.zfs","io.containerd.snapshotter.v1.devmapper","io.containerd.snapshotter.v1.erofs"]|' /etc/containerd/config.toml
+
+# NOTE(mnaser): Ensure SystemdCgroup is enabled.
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 
 # Enable service
