@@ -39,13 +39,16 @@ sed -i 's|^disabled_plugins.*|disabled_plugins = ["io.containerd.snapshotter.v1.
 # NOTE(mnaser): Ensure SystemdCgroup is enabled.
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 
+if [ -f /etc/redhat-release ]; then
+    # NOTE(fitbeard): Ensure selinux support is enabled
+    sed -i 's/enable_selinux = false/enable_selinux = true/g' /etc/containerd/config.toml
+
+    # NOTE(mnaser): 'diskimage-builder' does not support conditional
+    #               element dependencies, so we cannot use the
+    #               'selinux-permissive' element.
+    echo "SELINUX=permissive" > /etc/selinux/config
+    echo "SELINUXTYPE=targeted" >> /etc/selinux/config
+fi
+
 # Enable service
 systemctl enable containerd
-
-# NOTE(fitbeard): Prepare for systemd 240+ and containerd v2.
-#                 Set this as default: https://github.com/containerd/containerd/pull/8924
-install -d -o root -g root -m 755 /etc/systemd/system/containerd.service.d
-cat <<EOF > /etc/systemd/system/containerd.service.d/limits.conf
-[Service]
-LimitNOFILE=1048576
-EOF
