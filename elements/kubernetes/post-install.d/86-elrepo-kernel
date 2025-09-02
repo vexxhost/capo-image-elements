@@ -1,0 +1,14 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+# NOTE(fitbeard): Remove generic kernels
+if [ -f /etc/redhat-release ]; then
+    rpm -qa | grep -E '^kernel-[0-9]' | xargs dnf remove -y
+fi

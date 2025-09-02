@@ -1,2 +1,4 @@
+container-selinux:
+  when: DISTRO_NAME = rocky
 curl:
 libseccomp2:
