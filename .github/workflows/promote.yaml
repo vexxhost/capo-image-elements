@@ -133,7 +133,7 @@ jobs:
           prerelease: false
 
       - name: Start CI debugging on failures
-        uses: owenthereal/action-upterm@77f40a48f26e70aa301b03ade2e4e58b6aa1c4ef # v1.3.0
+        uses: owenthereal/action-upterm@79e3ca52c3f314ee1e104d7a31da2c16243da843 # v1.4.0
         if: ${{ failure() }}
         with:
           wait-timeout-minutes: 5
