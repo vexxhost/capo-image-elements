@@ -43,9 +43,7 @@ jobs:
         if: ${{ steps.split.outputs._0 == 'ubuntu' }}
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
-          path: |
-            /home/runner/.cache/image-create
-            !/home/runner/.cache/image-create/apt
+          path: /home/runner/.cache/image-create
           key: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
           restore-keys: |
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
@@ -59,7 +57,7 @@ jobs:
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
           DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
-          DIB_IMAGE_SIZE: "2.8"
+          DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
