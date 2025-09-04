@@ -49,10 +49,14 @@ export DIB_RELEASE=jammy
 export DIB_CLOUD_INIT_GROWPART_DEVICES="/"
 export DIB_SKIP_BASE_PACKAGE_INSTALL=1
 export DIB_KUBERNETES_VERSION=1.34.0
-disk-image-create vm block-device-efi ubuntu-minimal kubernetes
+disk-image-create vm ubuntu-minimal block-device-kubernetes kubernetes
 ```
 
+For Debian variant, `DIB_RELEASE` should be changed to `trixie` and the `ubuntu-minimal` element to `debian-minimal`.
+
 For Rocky Linux variant, `DIB_RELEASE` should be changed to `9` and the `ubuntu-minimal` element to `rocky-container`.
+
+With `block-device-kubernetes` element we are trimming `/boot/efi` partition to 100MiB. If you need a larger EFI boot partition size or planning to use MBR boot only, change this item to `block-device-efi` or `block-device-mbr`.
 
 You can add any other elements that you require for your image by adding them
 to the command.
