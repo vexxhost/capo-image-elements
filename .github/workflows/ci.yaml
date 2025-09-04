@@ -17,6 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - debian-minimal/trixie
           - ubuntu-minimal/jammy
           - rocky-container/9
         version:
