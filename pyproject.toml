@@ -4,5 +4,5 @@ version = "0.0.0"
 requires-python = ">=3.10"
 dependencies = [
     "bindep>=2.13.0",
-    "diskimage-builder>=3.37.0",
+    "diskimage-builder @ git+https://opendev.org/openstack/diskimage-builder.git@26f71b94591e62fd01157da14c044133bbb7c18f"
 ]

@@ -17,6 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os:
+          - debian-minimal/trixie
           - ubuntu-minimal/jammy
           - rocky-container/9
         version:
@@ -48,7 +49,7 @@ jobs:
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}
-      - run: uv run disk-image-create vm block-device-efi ${{ steps.split.outputs._0 }} kubernetes
+      - run: uv run disk-image-create vm ${{ steps.split.outputs._0 }} block-device-kubernetes kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._1 }}
@@ -56,6 +57,7 @@ jobs:
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
           DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
+          DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}

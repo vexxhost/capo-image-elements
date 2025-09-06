@@ -1,19 +1,20 @@
 # NOTE(fitbeard): We don't need cockpit on Rocky Linux.
 cockpit-ws:
-    uninstall: true
-    when: DISTRO_NAME = rocky
+  uninstall: true
+  when: DISTRO_NAME = rocky
 cockpit-system:
-    uninstall: true
-    when: DISTRO_NAME = rocky
+  uninstall: true
+  when: DISTRO_NAME = rocky
 # NOTE(fitbeard): Uninstalling 'linux-firmware' package
 #                 saves 400Mb of final image size.
 linux-firmware:
-    uninstall: true
+  uninstall: true
+  when: DISTRO_NAME != debian
 logrotate:
 nfs-common:
 rsyslog:
-# NOTE(fitbeard): Replace Networkmanager with systemd-networkd
+# NOTE(fitbeard): Use plain systemd-networkd for Debian and Rocky Linux.
 systemd-networkd:
   when: DISTRO_NAME = rocky
 systemd-resolved:
-  when: DISTRO_NAME = rocky
+  when: DISTRO_NAME != ubuntu

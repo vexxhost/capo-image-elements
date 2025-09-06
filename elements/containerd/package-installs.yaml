@@ -1,3 +1,5 @@
+apparmor:
+  when: DISTRO_NAME = debian
 container-selinux:
   when: DISTRO_NAME = rocky
 curl:
