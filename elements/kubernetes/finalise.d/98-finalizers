@@ -8,10 +8,8 @@ fi
 set -eu
 set -o pipefail
 
-if [ -f /etc/redhat-release ]; then
-    # NOTE(fitbeard): Replace NetworkManager with systemd-networkd
-    systemctl mask NetworkManager
-    systemctl mask NetworkManager-wait-online
+if [[ ${DISTRO_NAME} =~ (debian|rocky) ]]; then
+    # NOTE(fitbeard): Use plain systemd-networkd services for Debian and Rocky Linux.
     systemctl enable systemd-networkd
     systemctl enable systemd-resolved
     ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
@@ -22,6 +20,12 @@ system_info:
     renderers: ['networkd']
     activators: ['networkd']
 EOF
+fi
+
+if [ -f /etc/redhat-release ]; then
+    # NOTE(fitbeard): Mask NetworkManager
+    systemctl mask NetworkManager
+    systemctl mask NetworkManager-wait-online
 
     # NOTE(fitbeard): From https://github.com/rocky-linux/kickstarts/blob/r9/Rocky-9-GenericCloud-Base.ks
     if ! grep -q growpart /etc/cloud/cloud.cfg; then
