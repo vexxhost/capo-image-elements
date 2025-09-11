@@ -21,10 +21,10 @@ jobs:
           - ubuntu-minimal/jammy
           - rocky-container/9
         version:
-          - 1.31.12
-          - 1.32.8
-          - 1.33.4
-          - 1.34.0
+          - 1.31.13
+          - 1.32.9
+          - 1.33.5
+          - 1.34.1
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6.6.1
