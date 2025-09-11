@@ -18,13 +18,13 @@ jobs:
       matrix:
         os:
           - debian/13/debian-minimal/trixie
-          - ubuntu/22.04/ubuntu-minimal/jammy
-          - rockylinux/9/rocky-container/9
+          # - ubuntu/22.04/ubuntu-minimal/jammy
+          # - rockylinux/9/rocky-container/9
         version:
           - 1.31.12
-          - 1.32.8
-          - 1.33.4
-          - 1.34.0
+          # - 1.32.8
+          # - 1.33.4
+          # - 1.34.0
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6.6.1
@@ -47,7 +47,7 @@ jobs:
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}
-      - run: uv run disk-image-create vm ${{ steps.split.outputs._2 }} block-device-kubernetes kubernetes
+      - run: uv run disk-image-create -o ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}.qcow2 vm ${{ steps.split.outputs._2 }} block-device-kubernetes kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._3 }}
@@ -58,8 +58,8 @@ jobs:
           DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}
-          path: image.qcow2
+          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}-${{ github.run_id }}
+          path: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}.qcow2
           if-no-files-found: error
           retention-days: 7
       - run: mv image.qcow2 ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}.qcow2
@@ -77,3 +77,150 @@ jobs:
       #     prerelease: true
       #     files: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
       #     token: ${{ secrets.VEXXHOST_BOT_PAT }}
+
+  devstack:
+    runs-on: ubuntu-latest
+    needs: build
+    concurrency:
+      group: build-${{ github.ref }}-${{ matrix.os }}-${{ matrix.version }}
+      cancel-in-progress: true
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - debian/13/debian-minimal/trixie
+          # - ubuntu/22.04/ubuntu-minimal/jammy
+          # - rockylinux/9/rocky-container/9
+        version:
+          - 1.31.12
+          # - 1.32.8
+          # - 1.33.4
+          # - 1.34.0
+    steps:
+      - uses: winterjung/split@7f51d99e7cc1f147f6f99be75acf5e641930af88 # v2.1.0
+        id: split
+        with:
+          msg: ${{ matrix.os }}
+          separator: "/"
+
+      - name: Deploy OpenStack cloud
+        uses: gophercloud/devstack-action@60ca1042045c0c9e3e001c64575d381654ffcba1 # v0.19
+        with:
+          enable_workaround_docker_io: false
+
+      - name: Allow Docker traffic
+        run: sudo iptables -I DOCKER-USER -j ACCEPT
+
+      - name: Create KinD cluster
+        run: |
+          kind create cluster
+          kubectl version
+
+      - name: Install "clusterctl"
+        run: |
+          curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.10.4/clusterctl-linux-amd64 -o clusterctl
+          sudo install -o root -g root -m 0755 clusterctl /usr/local/bin/clusterctl
+          clusterctl version
+
+      - name: Install Cluster API provider for OpenStack
+        run: clusterctl init --infrastructure openstack
+        env:
+          CLUSTER_TOPOLOGY: "true"
+          EXP_CLUSTER_RESOURCE_SET: "true"
+
+      - name: Install OpenStack Resource Controller
+        run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
+      
+      - name: Download image artifact
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}-${{ github.run_id }}
+
+      - name: Load image under test
+        run: |
+          openstack image create --disk-format qcow2 --file ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}.qcow2 image-under-test
+          rm -rfv ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-*
+        env:
+          OS_CLOUD: devstack
+
+      - name: Create SSH keypair
+        run: |
+          openstack keypair create --private-key id_ed25519 runner
+        env:
+          OS_CLOUD: devstack
+
+      - name: Deploy Kubernetes cluster
+        run: |
+          export OPENSTACK_CLOUD_YAML_B64=$(cat /etc/openstack/clouds.yaml | base64 -w0)
+          export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
+          export KUBERNETES_VERSION=${{ matrix.version }}
+          echo "Using KUBERNETES_VERSION=${KUBERNETES_VERSION}"
+          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
+        env:
+          OS_CLOUD: "devstack"
+          OPENSTACK_CLOUD_CACERT_B64: ""
+          OPENSTACK_CLOUD: "devstack"
+          OPENSTACK_DNS_NAMESERVERS: "1.1.1.1"
+          OPENSTACK_FAILURE_DOMAIN: "nova"
+          OPENSTACK_CONTROL_PLANE_MACHINE_FLAVOR: "ds2G"
+          OPENSTACK_NODE_MACHINE_FLAVOR: "ds2G"
+          OPENSTACK_IMAGE_NAME: "image-under-test"
+          OPENSTACK_SSH_KEY_NAME: "runner"
+
+      - name: Wait for control plane to initialize
+        run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=120s cluster/test
+
+      - name: Get workload cluster KUBECONFIG
+        run: clusterctl get kubeconfig test > /tmp/kubeconfig
+
+      - name: Install OpenStack cloud controller manager
+        run: |
+          helm repo add cpo https://kubernetes.github.io/cloud-provider-openstack
+          helm repo update
+          cat <<EOF | helm upgrade --install --namespace kube-system openstack-ccm cpo/openstack-cloud-controller-manager --values /dev/stdin
+          tolerations:
+            - key: node.cloudprovider.kubernetes.io/uninitialized
+              value: "true"
+              effect: NoSchedule
+            - key: node-role.kubernetes.io/control-plane
+              effect: NoSchedule
+            - key: node.kubernetes.io/not-ready
+              effect: NoSchedule
+          enabledControllers:
+            - cloud-node
+            - cloud-node-lifecycle
+          cloudConfig:
+            global:
+              auth-url: $(yq '.clouds.devstack.auth.auth_url' /etc/openstack/clouds.yaml)/v3
+              username: demo
+              password: secret
+              region: RegionOne
+              tenant-name: demo
+              domain-name: default
+          EOF
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Install Cilium
+        run: |
+          CILIUM_CLI_VERSION=$(curl -s https://raw.githubusercontent.com/cilium/cilium-cli/main/stable.txt)
+          CLI_ARCH=amd64
+          if [ "$(uname -m)" = "aarch64" ]; then CLI_ARCH=arm64; fi
+          curl -L --fail --remote-name-all https://github.com/cilium/cilium-cli/releases/download/${CILIUM_CLI_VERSION}/cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+          sha256sum --check cilium-linux-${CLI_ARCH}.tar.gz.sha256sum
+          sudo tar xzvfC cilium-linux-${CLI_ARCH}.tar.gz /usr/local/bin
+          rm cilium-linux-${CLI_ARCH}.tar.gz{,.sha256sum}
+          cilium install
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Wait for all nodes to be ready
+        run: kubectl wait --for=condition=Ready nodes --all --timeout=5m
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
+      - name: Start CI debugging on failures
+        uses: owenthereal/action-upterm@2f4c8d6df06230280f48b80e87c4edc6cf2cf890 # v1.5.0
+        if: ${{ failure() }}
+        with:
+          wait-timeout-minutes: 5
