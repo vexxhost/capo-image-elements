@@ -17,9 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - debian-minimal/trixie
-          - ubuntu-minimal/jammy
-          - rocky-container/9
+          - debian/13/debian-minimal/trixie
+          - ubuntu/22.04/ubuntu-minimal/jammy
+          - rockylinux/9/rocky-container/9
         version:
           - 1.31.12
           - 1.32.8
@@ -38,19 +38,19 @@ jobs:
           msg: ${{ matrix.os }}
           separator: "/"
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
-        if: ${{ steps.split.outputs._0 == 'ubuntu' }}
+        if: ${{ steps.split.outputs._0 == 'ubuntu-minimal' }}
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: /home/runner/.cache/image-create
-          key: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
+          key: ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
           restore-keys: |
-            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
-            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
-            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}
-      - run: uv run disk-image-create vm ${{ steps.split.outputs._0 }} block-device-kubernetes kubernetes
+            ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
+            ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}
+            ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}
+      - run: uv run disk-image-create vm ${{ steps.split.outputs._2 }} block-device-kubernetes kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
-          DIB_RELEASE: ${{ steps.split.outputs._1 }}
+          DIB_RELEASE: ${{ steps.split.outputs._3 }}
           DIB_KUBERNETES_VERSION: ${{ matrix.version }}
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
@@ -58,22 +58,22 @@ jobs:
           DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}
+          name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}
           path: image.qcow2
           if-no-files-found: error
           retention-days: 7
-      - run: mv image.qcow2 ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
+      - run: mv image.qcow2 ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-kube-v${{ matrix.version }}.qcow2
         if: github.event_name != 'pull_request'
-      - uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
-        if: github.event_name != 'pull_request'
-        with:
-          tag_name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}
-          body: |
-            # Kubernetes ${{ matrix.version }}
+      # - uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+      #   if: github.event_name != 'pull_request'
+      #   with:
+      #     tag_name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}
+      #     body: |
+      #       # Kubernetes ${{ matrix.version }}
 
-            - SHA: `${{ github.sha }}`
-            - OS: `${{ steps.split.outputs._0 }}`
-            - Release: `${{ steps.split.outputs._1 }}`
-          prerelease: true
-          files: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
-          token: ${{ secrets.VEXXHOST_BOT_PAT }}
+      #       - SHA: `${{ github.sha }}`
+      #       - OS: `${{ steps.split.outputs._0 }}`
+      #       - Release: `${{ steps.split.outputs._1 }}`
+      #     prerelease: true
+      #     files: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-${{ matrix.version }}-${{ github.run_id }}.qcow2
+      #     token: ${{ secrets.VEXXHOST_BOT_PAT }}
