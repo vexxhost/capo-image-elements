@@ -243,7 +243,7 @@ jobs:
         uses: alepee/calendar-version-action@288fc1fd1e6d3e892dd1f95a1e72e06348dd44b3 # v1
         id: version
         with:
-          dateFormat: "YYYY.0M.0D"
+          dateFormat: "YYYY.0M"
           format: "%NOW%-%MICRO%"
       - uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
         if: steps.prepare_files.outputs.files != ''
