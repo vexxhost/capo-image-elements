@@ -229,7 +229,7 @@ jobs:
         id: prepare_files
         shell: bash
         run: |
-          files=$(find . -path "*kube*" -name "*.qcow2" -type f)
+          files=$(find . -mindepth 2 -maxdepth 2 -name "*.qcow2" -type f)
           if [ -n "$files" ]; then
             echo "Found qcow2 files:"
             echo "$files"
@@ -239,7 +239,7 @@ jobs:
               echo "EOF"
             } >> $GITHUB_OUTPUT
           else
-            echo "No qcow2 files found in kube directories"
+            echo "No qcow2 files found"
             echo "files=" >> $GITHUB_OUTPUT
           fi
       - name: Generate release version
