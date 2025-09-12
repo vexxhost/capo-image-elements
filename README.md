@@ -19,17 +19,14 @@ with the Cluster API provider for OpenStack.
 This repository runs nightly updates to grab the latest maintained Kubernetes versions
 and creates a pull request to update the versions in the CI workflow.
 
-### Pre-release images
-
-Upon every merge to the main branch, a new pre-release image will be built and published
-as a GitHub pre-release.  In addition, contributors of this repository are able to trigger
-builds by using the workflow dispatch trigger.
-
 ### Release images
 
-Once a pre-release is created, a CI workflow will start up a DevStack instance with the
-Cluster API provider for OpenStack, spin up a cluster with this image and ensure that
-it can spin up a cluster successfully.
+Upon every merge to the main branch, a CI workflow will start up a DevStack instance
+with the Cluster API provider for OpenStack. For all maintained Kubernetes releases on
+different Linux distributions, it will spin up a cluster with the image and ensure that
+it can create a cluster successfully. After this, new images will be built and
+published as a GitHub release. In addition, contributors to this repository can trigger
+builds by using the workflow dispatch trigger.
 
 ## Building the images
 
