@@ -1,0 +1,21 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+SCRIPTDIR="$(dirname $0)"
+
+# vlan and bond support in networkd
+# https://github.com/canonical/cloud-init/pull/6324
+
+if [ -f /usr/lib/python3/dist-packages/cloudinit/net/networkd.py ]; then
+  actual_checksum="$(sha256sum /usr/lib/python3/dist-packages/cloudinit/net/networkd.py | awk '{print $1}')"
+  if [ "$actual_checksum" = 'ba6490a894d03eb3bc389b6de63355e31bef0bc067d234b7f8966016d7887561' ]; then
+    cp -v "$SCRIPTDIR/networkd.py" /usr/lib/python3/dist-packages/cloudinit/net/networkd.py
+  fi
+fi
