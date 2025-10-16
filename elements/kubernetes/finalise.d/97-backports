@@ -1,0 +1,26 @@
+#!/bin/bash
+# SPDX-License-Identifier: Apache-2.0
+
+if [ ${DIB_DEBUG_TRACE:-1} -gt 0 ]; then
+    set -x
+fi
+
+set -eu
+set -o pipefail
+
+if [[ ${DISTRO_NAME} =~ (debian) ]]; then
+    # NOTE(fitbeard): For Debian Trixie backport 'cloud-init' from unstable to have a version
+    #                 that supports vlan and bond in networkd.
+    #                 https://github.com/canonical/cloud-init/pull/6324
+    echo "deb http://deb.debian.org/debian unstable main" | tee /etc/apt/sources.list.d/unstable.list
+
+    cat <<EOF > /etc/apt/preferences.d/99pin-unstable
+Package: *
+Pin: release a=unstable
+Pin-Priority: 100
+EOF
+
+    apt update
+    apt install -t unstable cloud-init -y
+    rm -fr /etc/apt/sources.list.d/unstable.list
+fi
