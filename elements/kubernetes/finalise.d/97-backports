@@ -22,5 +22,5 @@ EOF
 
     apt update
     apt install -t unstable cloud-init -y
-    rm -fr /etc/apt/sources.list.d/unstable.list
+    rm -fr /etc/apt/sources.list.d/unstable.list /etc/apt/preferences.d/99pin-unstable
 fi
