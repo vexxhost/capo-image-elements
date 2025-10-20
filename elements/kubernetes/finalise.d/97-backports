@@ -8,11 +8,12 @@ fi
 set -eu
 set -o pipefail
 
-if [[ ${DISTRO_NAME} =~ (debian) ]]; then
-    # NOTE(fitbeard): For Debian Trixie backport 'cloud-init' from unstable to have a version
-    #                 that supports vlan and bond in networkd.
+if [[ ${DIB_RELEASE} =~ (trixie) ]]; then
+    # NOTE(fitbeard): For Debian Trixie backport 'cloud-init' from unstable snapshot
+    #                 to have a version that supports vlan and bond in networkd.
     #                 https://github.com/canonical/cloud-init/pull/6324
-    echo "deb http://deb.debian.org/debian unstable main" | tee /etc/apt/sources.list.d/unstable.list
+    apt install ca-certificates -y
+    echo "deb https://snapshot.debian.org/archive/debian/20251014T204255Z/ unstable main" | tee /etc/apt/sources.list.d/unstable.list
 
     cat <<EOF > /etc/apt/preferences.d/99pin-unstable
 Package: *
