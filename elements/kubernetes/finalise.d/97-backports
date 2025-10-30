@@ -13,7 +13,7 @@ if [[ ${DIB_RELEASE} =~ (trixie) ]]; then
     #                 to have a version that supports vlan and bond in networkd.
     #                 https://github.com/canonical/cloud-init/pull/6324
     apt install ca-certificates -y
-    echo "deb https://snapshot.debian.org/archive/debian/20251014T204255Z/ unstable main" | tee /etc/apt/sources.list.d/unstable.list
+    echo "deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20251014T204255Z/ unstable main" | tee /etc/apt/sources.list.d/unstable.list
 
     cat <<EOF > /etc/apt/preferences.d/99pin-unstable
 Package: *
