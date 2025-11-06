@@ -55,7 +55,7 @@ jobs:
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
           DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
           DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}-${{ github.run_id }}
           path: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.qcow2
@@ -118,7 +118,7 @@ jobs:
         run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
       
       - name: Download image artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}-${{ github.run_id }}
 
@@ -222,7 +222,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Download image artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
       - name: Prepare qcow2 files list
         id: prepare_files
         shell: bash
