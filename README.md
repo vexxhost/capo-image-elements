@@ -45,7 +45,7 @@ export ELEMENTS_PATH=$PWD/elements
 export DIB_RELEASE=jammy
 export DIB_CLOUD_INIT_GROWPART_DEVICES="/"
 export DIB_SKIP_BASE_PACKAGE_INSTALL=1
-export DIB_KUBERNETES_VERSION=1.34.1
+export DIB_KUBERNETES_VERSION=1.34.2
 disk-image-create vm ubuntu-minimal block-device-kubernetes kubernetes
 ```
 
