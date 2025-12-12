@@ -8,8 +8,11 @@ fi
 set -eu
 set -o pipefail
 
-# NOTE(fitbeard): Install newer kernel
 if [ -f /etc/redhat-release ]; then
+    # NOTE(mnaser): The GPG error has been updated but the "elrepo-release" package
+    #               still points to the old key.
+    rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+
     dnf install -y elrepo-release
     dnf --enablerepo=elrepo-kernel install -y kernel-${DIB_ELREPO_KERNEL_TYPE}
 fi
