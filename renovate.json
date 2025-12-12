@@ -2,5 +2,15 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>vexxhost/.github"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^elements/runc/install\\.d/70-runc$"],
+      "matchStrings": ["DIB_RUNC_VERSION=\\$\\{DIB_RUNC_VERSION:-\"(?<currentValue>.*?)\"\\}"],
+      "depNameTemplate": "opencontainers/runc",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    }
   ]
 }

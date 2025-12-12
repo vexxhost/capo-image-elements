@@ -96,25 +96,3 @@ jobs:
           delete-branch: true
           branch: bump/kubernetes
 
-  runc:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          token: ${{ secrets.VEXXHOST_BOT_PAT }}
-      - run: ./hack/bump/runc.sh
-        env:
-          GH_TOKEN: ${{ github.token }}
-      - uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
-        with:
-          token: ${{ secrets.VEXXHOST_BOT_PAT }}
-          push-to-fork: vexxhost-bot/capo-image-elements
-          commit-message: "chore(deps): update runc"
-          signoff: true
-          branch: bump/runc
-          delete-branch: true
-          title: "chore(deps): update runc"
-          body: |
-            ## Automated `runc` update
-
-            This PR updates the `runc` binaries to the latest versions.
