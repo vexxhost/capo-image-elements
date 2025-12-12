@@ -11,6 +11,14 @@
       "depNameTemplate": "opencontainers/runc",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^elements/cni-plugins/install\\.d/70-cni-plugins$"],
+      "matchStrings": ["DIB_CNI_PLUGINS_VERSION=\\$\\{DIB_CNI_PLUGINS_VERSION:-\"(?<currentValue>.*?)\"\\}"],
+      "depNameTemplate": "containernetworking/plugins",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     }
   ]
 }
