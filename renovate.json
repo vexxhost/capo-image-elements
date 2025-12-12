@@ -27,6 +27,14 @@
       "depNameTemplate": "kubernetes-sigs/cri-tools",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^elements/containerd/install\\.d/70-containerd$"],
+      "matchStrings": ["DIB_CONTAINERD_VERSION=\\$\\{DIB_CONTAINERD_VERSION:-\"(?<currentValue>.*?)\"\\}"],
+      "depNameTemplate": "containerd/containerd",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     }
   ]
 }
