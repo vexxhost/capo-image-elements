@@ -35,6 +35,26 @@
       "depNameTemplate": "containerd/containerd",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "^elements/kubeadm/install\\.d/70-kubeadm$",
+        "^elements/kubectl/install\\.d/70-kubectl$",
+        "^elements/kubelet/install\\.d/70-kubelet$",
+        "^elements/kubernetes/environment\\.d/10-kubernetes$",
+        "^README\\.md$"
+      ],
+      "matchStrings": [
+        "DIB_KUBEADM_VERSION=\\$\\{DIB_KUBEADM_VERSION:-\"(?<currentValue>.*?)\"\\}",
+        "DIB_KUBECTL_VERSION=\\$\\{DIB_KUBECTL_VERSION:-\"(?<currentValue>.*?)\"\\}",
+        "DIB_KUBELET_VERSION=\\$\\{DIB_KUBELET_VERSION:-\"(?<currentValue>.*?)\"\\}",
+        "export DIB_KUBERNETES_VERSION=\\$\\{DIB_KUBERNETES_VERSION:-\"(?<currentValue>.*?)\"\\}",
+        "export DIB_KUBERNETES_VERSION=(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "depNameTemplate": "kubernetes/kubernetes",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     }
   ]
 }

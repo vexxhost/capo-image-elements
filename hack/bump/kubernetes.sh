@@ -1,3 +1,6 @@
+# Copyright (c) 2025 VEXXHOST, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
 set -e
 
 # Fetch current maintained Kubernetes versions
@@ -29,30 +32,5 @@ in_version && !/^          -/ {
 }
 ' .github/workflows/ci.yaml
 
-# Get the latest stable version (last one in the sorted list)
-LATEST_VERSION=$(echo "$VERSIONS" | tail -n 1)
-
-# Update README.md with the latest version
-sed -i "s/export DIB_KUBERNETES_VERSION=.*/export DIB_KUBERNETES_VERSION=${LATEST_VERSION}/" README.md
-
-# Update kubeadm with the latest version
-sed -i "s/^DIB_KUBEADM_VERSION=.*/DIB_KUBEADM_VERSION=\${DIB_KUBEADM_VERSION:-\"${LATEST_VERSION}\"}/" \
-  elements/kubeadm/install.d/70-kubeadm
-
-# Update kubectl with the latest version
-sed -i "s/^DIB_KUBECTL_VERSION=.*/DIB_KUBECTL_VERSION=\${DIB_KUBECTL_VERSION:-\"${LATEST_VERSION}\"}/" \
-  elements/kubectl/install.d/70-kubectl
-
-# Update kubelet with the latest version
-sed -i "s/^DIB_KUBELET_VERSION=.*/DIB_KUBELET_VERSION=\${DIB_KUBELET_VERSION:-\"${LATEST_VERSION}\"}/" \
-  elements/kubelet/install.d/70-kubelet
-
-# Update environment with the latest version
-sed -i "s/^export DIB_KUBERNETES_VERSION=.*/export DIB_KUBERNETES_VERSION=\${DIB_KUBERNETES_VERSION:-\"${LATEST_VERSION}\"}/" \
-  elements/kubernetes/environment.d/10-kubernetes
-
 echo "Updated Kubernetes versions in CI workflow to:"
 echo "$VERSIONS"
-echo ""
-echo "Updated README.md DIB_KUBERNETES_VERSION to: ${LATEST_VERSION}"
-echo "Updated Kubernetes components to version ${LATEST_VERSION}."
