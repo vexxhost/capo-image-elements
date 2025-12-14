@@ -9,10 +9,8 @@ set -eu
 set -o pipefail
 
 if [ -f /etc/redhat-release ]; then
-    # NOTE(mnaser): The GPG error has been updated but the "elrepo-release" package
-    #               still points to the old key.
     rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+    dnf install -y https://www.elrepo.org/elrepo-release-${DIB_RELEASE}.el9.elrepo.noarch.rpm
 
-    dnf install -y elrepo-release
     dnf --enablerepo=elrepo-kernel install -y kernel-${DIB_ELREPO_KERNEL_TYPE}
 fi
