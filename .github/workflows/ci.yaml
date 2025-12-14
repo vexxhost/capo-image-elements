@@ -22,8 +22,8 @@ jobs:
           - rockylinux/9/rocky-container/9
         version:
           - 1.32.10
-          - 1.33.6
-          - 1.34.2
+          - 1.33.7
+          - 1.34.3
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: astral-sh/setup-uv@5a7eac68fb9809dea845d802897dc5c723910fa3 # v7.1.3
@@ -77,8 +77,8 @@ jobs:
           - rockylinux/9/rocky-container/9
         version:
           - 1.32.10
-          - 1.33.6
-          - 1.34.2
+          - 1.33.7
+          - 1.34.3
     permissions:
       contents: read
     steps:
