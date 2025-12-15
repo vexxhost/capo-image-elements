@@ -8,7 +8,7 @@ fi
 set -eu
 set -o pipefail
 
-DIB_CRI_TOOLS_VERSION=${DIB_CRI_TOOLS_VERSION:-"1.34.0"}
+DIB_CRI_TOOLS_VERSION=${DIB_CRI_TOOLS_VERSION:-"1.35.0"}
 
 DIB_CRICTL_URL=${DIB_CRICTL_URL:-"https://github.com/kubernetes-sigs/cri-tools/releases/download/v${DIB_CRI_TOOLS_VERSION}/crictl-v${DIB_CRI_TOOLS_VERSION}-linux-${ARCH}.tar.gz"}
 DIB_CRICTL_SHA256SUM_URL=${DIB_CRICTL_SHA256SUM_URL:-"${DIB_CRICTL_URL}.sha256"}
