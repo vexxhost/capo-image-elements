@@ -1,5 +1,6 @@
 - local_loop:
     name: image0
+    block_size: 4096
 
 - partitioning:
     base: image0
