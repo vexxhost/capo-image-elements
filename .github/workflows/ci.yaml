@@ -69,7 +69,7 @@ jobs:
       group: build-${{ github.ref }}-${{ matrix.os }}-${{ matrix.version }}
       cancel-in-progress: true
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os:
           - debian/13/debian-minimal/trixie
