@@ -55,6 +55,27 @@
       "depNameTemplate": "kubernetes/kubernetes",
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/ci\\.yaml$"],
+      "matchStrings": [
+        "kubernetes-sigs/cluster-api/releases/download/v(?<currentValue>[0-9.]+)/clusterctl"
+      ],
+      "depNameTemplate": "kubernetes-sigs/cluster-api",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["^\\.github/workflows/ci\\.yaml$"],
+      "matchStrings": [
+        "--infrastructure openstack:v(?<currentValue>[0-9.]+)",
+        "cluster-api-provider-openstack/releases/download/v(?<currentValue>[0-9.]+)/"
+      ],
+      "depNameTemplate": "kubernetes-sigs/cluster-api-provider-openstack",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)$"
     }
   ]
 }
