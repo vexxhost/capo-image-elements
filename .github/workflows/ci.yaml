@@ -114,6 +114,9 @@ jobs:
           CLUSTER_TOPOLOGY: "true"
           EXP_CLUSTER_RESOURCE_SET: "true"
 
+      - name: Wait for Cluster API provider for OpenStack to initialize
+        run: kubectl wait --for=condition=available --timeout=120s deployment/capo-controller-manager -n capo-system
+
       - name: Install OpenStack Resource Controller
         run: kubectl apply --server-side -f https://github.com/k-orc/openstack-resource-controller/releases/latest/download/install.yaml
       
