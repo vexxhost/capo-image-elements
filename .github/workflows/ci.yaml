@@ -99,17 +99,17 @@ jobs:
 
       - name: Create KinD cluster
         run: |
-          kind create cluster --image kindest/node:v1.34.3@sha256:08497ee19eace7b4b5348db5c6a1591d7752b164530a36f855cb0f2bdcbadd48
+          kind create cluster
           kubectl version
 
       - name: Install "clusterctl"
         run: |
-          curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.10.4/clusterctl-linux-amd64 -o clusterctl
+          curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.12.1/clusterctl-linux-amd64 -o clusterctl
           sudo install -o root -g root -m 0755 clusterctl /usr/local/bin/clusterctl
           clusterctl version
 
       - name: Install Cluster API provider for OpenStack
-        run: clusterctl init --infrastructure openstack
+        run: clusterctl init --infrastructure openstack:v0.14.0
         env:
           CLUSTER_TOPOLOGY: "true"
           EXP_CLUSTER_RESOURCE_SET: "true"
@@ -144,7 +144,7 @@ jobs:
           export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
           export KUBERNETES_VERSION=${{ matrix.version }}
           echo "Using KUBERNETES_VERSION=${KUBERNETES_VERSION}"
-          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.12.4/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
+          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.14.0/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
         env:
           OS_CLOUD: "devstack"
           OPENSTACK_CLOUD_CACERT_B64: ""
