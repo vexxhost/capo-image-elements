@@ -38,7 +38,7 @@ jobs:
           separator: "/"
       - run: sudo chown root /bin/tar && sudo chmod u+s /bin/tar
         if: ${{ steps.split.outputs._2 == 'ubuntu-minimal' }}
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
           path: /home/runner/.cache/image-create
           key: ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
