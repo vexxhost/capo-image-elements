@@ -209,7 +209,7 @@ jobs:
           KUBECONFIG: /tmp/kubeconfig
 
       - name: Start CI debugging on failures
-        uses: owenthereal/action-upterm@a639d5441986141cf7c7c8b64c02b6997b5bb638 # v1.11.0
+        uses: owenthereal/action-upterm@74d5d8bd3d4289468cdfc077df22adb884020f06 # v1.13.0
         if: ${{ failure() }}
         with:
           wait-timeout-minutes: 5
