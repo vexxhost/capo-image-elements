@@ -21,10 +21,10 @@ jobs:
           - ubuntu/22.04/ubuntu-minimal/jammy
           - rockylinux/9/rocky-container/9
         version:
-          - 1.32.11
-          - 1.33.7
-          - 1.34.3
-          - 1.35.0
+          - 1.32.12
+          - 1.33.8
+          - 1.34.4
+          - 1.35.1
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: astral-sh/setup-uv@eac588ad8def6316056a12d4907a9d4d84ff7a3b # v7.3.0
@@ -77,10 +77,10 @@ jobs:
           - ubuntu/22.04/ubuntu-minimal/jammy
           - rockylinux/9/rocky-container/9
         version:
-          - 1.32.11
-          - 1.33.7
-          - 1.34.3
-          - 1.35.0
+          - 1.32.12
+          - 1.33.8
+          - 1.34.4
+          - 1.35.1
     permissions:
       contents: read
     steps:
