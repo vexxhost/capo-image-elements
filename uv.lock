@@ -38,13 +38,13 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "bindep", specifier = ">=2.13.0" },
-    { name = "diskimage-builder", git = "https://opendev.org/openstack/diskimage-builder.git?rev=26f71b94591e62fd01157da14c044133bbb7c18f" },
+    { name = "diskimage-builder", specifier = "==3.40.2" },
 ]
 
 [[package]]
 name = "diskimage-builder"
-version = "3.39.1.dev10"
-source = { git = "https://opendev.org/openstack/diskimage-builder.git?rev=26f71b94591e62fd01157da14c044133bbb7c18f#26f71b94591e62fd01157da14c044133bbb7c18f" }
+version = "3.40.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flake8" },
     { name = "jsonschema" },
@@ -52,6 +52,10 @@ dependencies = [
     { name = "pbr" },
     { name = "pyyaml" },
     { name = "stevedore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/3f/6c/cd1cf55156f5d414e37653b96a41495f728bbe706b139370bdefc54695b1/diskimage_builder-3.40.2.tar.gz", hash = "sha256:9f7f4b8e32cf798a1dde1b920a8222dab8496a38c4c87e713de8ea7a0c8e60de", size = 557068, upload-time = "2026-01-29T21:57:51.493Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/e5/34f877e7b0f5266f1987f30f122814e09b1111a8af2347e789e2066f2826/diskimage_builder-3.40.2-py3-none-any.whl", hash = "sha256:fdbec1042e878055e33c212f9b7d03716a3d936dce17f3f4fada0b6a7eabd5d1", size = 717855, upload-time = "2026-01-29T21:57:50.121Z" },
 ]
 
 [[package]]
