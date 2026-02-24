@@ -111,7 +111,7 @@ jobs:
           clusterctl version
 
       - name: Install Cluster API provider for OpenStack
-        run: clusterctl init --infrastructure openstack:v0.14.0
+        run: clusterctl init --infrastructure openstack:v0.14.1
         env:
           CLUSTER_TOPOLOGY: "true"
           EXP_CLUSTER_RESOURCE_SET: "true"
@@ -146,7 +146,7 @@ jobs:
           export OPENSTACK_EXTERNAL_NETWORK_ID=$(openstack network show public -c ID -f value)
           export KUBERNETES_VERSION=${{ matrix.version }}
           echo "Using KUBERNETES_VERSION=${KUBERNETES_VERSION}"
-          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.14.0/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
+          clusterctl generate cluster --from https://github.com/kubernetes-sigs/cluster-api-provider-openstack/releases/download/v0.14.1/cluster-template-without-lb.yaml --worker-machine-count 1 test | kubectl apply -f -
         env:
           OS_CLOUD: "devstack"
           OPENSTACK_CLOUD_CACERT_B64: ""
