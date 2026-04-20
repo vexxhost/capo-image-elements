@@ -49,6 +49,8 @@ export DIB_KUBERNETES_VERSION=1.35.4
 disk-image-create vm ubuntu-minimal block-device-kubernetes kubernetes
 ```
 
+For Ubuntu 24.04 variant, `DIB_RELEASE` should be changed to `noble`.
+
 For Debian variant, `DIB_RELEASE` should be changed to `trixie` and the `ubuntu-minimal` element to `debian-minimal`.
 
 For Rocky Linux variant, `DIB_RELEASE` should be changed to `9` and the `ubuntu-minimal` element to `rocky-container`.

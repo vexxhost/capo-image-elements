@@ -21,6 +21,7 @@ jobs:
         os:
           - debian/13/debian-minimal/trixie
           - ubuntu/22.04/ubuntu-minimal/jammy
+          - ubuntu/24.04/ubuntu-minimal/noble
           - rockylinux/9/rocky-container/9
         version:
           - 1.33.11
@@ -81,6 +82,7 @@ jobs:
         os:
           - debian/13/debian-minimal/trixie
           - ubuntu/22.04/ubuntu-minimal/jammy
+          - ubuntu/24.04/ubuntu-minimal/noble
           - rockylinux/9/rocky-container/9
         version:
           - 1.33.11
