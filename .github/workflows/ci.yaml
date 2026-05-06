@@ -54,7 +54,7 @@ jobs:
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}-${{ github.head_ref || github.ref_name }}
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}-${{ matrix.version }}
             ${{ steps.split.outputs._2 }}-${{ steps.split.outputs._3 }}
-      - run: uv run disk-image-create -o ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.qcow2 vm ${{ steps.split.outputs._2 }} block-device-kubernetes kubernetes
+      - run: uv run disk-image-create -t qcow2,raw -o ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }} vm ${{ steps.split.outputs._2 }} block-device-kubernetes kubernetes
         env:
           ELEMENTS_PATH: ${{ github.workspace }}/elements
           DIB_RELEASE: ${{ steps.split.outputs._3 }}
@@ -66,7 +66,9 @@ jobs:
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}-${{ github.run_id }}
-          path: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.qcow2
+          path: |
+            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.qcow2
+            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.raw
           if-no-files-found: error
           retention-days: 7
 
@@ -245,13 +247,13 @@ jobs:
           fetch-depth: 0
       - name: Download image artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-      - name: Prepare qcow2 files list
+      - name: Prepare image files list
         id: prepare_files
         shell: bash
         run: |
-          files=$(find . -mindepth 2 -maxdepth 2 -name "*.qcow2" -type f)
+          files=$(find . -mindepth 2 -maxdepth 2 \( -name "*.qcow2" -o -name "*.raw" \) -type f)
           if [ -n "$files" ]; then
-            echo "Found qcow2 files:"
+            echo "Found image files:"
             echo "$files"
             {
               echo "files<<EOF"
@@ -259,7 +261,7 @@ jobs:
               echo "EOF"
             } >> $GITHUB_OUTPUT
           else
-            echo "No qcow2 files found"
+            echo "No image files found"
             echo "files=" >> $GITHUB_OUTPUT
           fi
       - name: Generate release version
