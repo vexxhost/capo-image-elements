@@ -62,7 +62,6 @@ jobs:
           DIB_MIN_TMPFS: "4"
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
           DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
-          DIB_BOOTLOADER_DEFAULT_CMDLINE: " " # Avoid adding any default kernel options defined by diskimage-builder
           DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -173,6 +172,43 @@ jobs:
 
       - name: Wait for control plane to initialize
         run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=120s cluster/test
+
+      - name: Verify control plane instance console log
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          mapfile -t INSTANCE_IDS < <(openstack server list -f value -c ID)
+          if [ "${#INSTANCE_IDS[@]}" -ne 1 ]; then
+            echo "Expected exactly 1 OpenStack instance, found ${#INSTANCE_IDS[@]}:"
+            openstack server list
+            exit 1
+          fi
+          INSTANCE_ID="${INSTANCE_IDS[0]}"
+          echo "Instance ID: ${INSTANCE_ID}"
+
+          LOG=$(openstack console log show "${INSTANCE_ID}")
+          echo "----- console log -----"
+          echo "${LOG}"
+          echo "----- end console log -----"
+
+          if [ -z "${LOG//[[:space:]]/}" ]; then
+            echo "ERROR: console log is empty"
+            exit 1
+          fi
+
+          if ! grep -qE '^(Kernel command line|Command line):' <<<"${LOG}"; then
+            echo "ERROR: no kernel/command line entries found in console log"
+            exit 1
+          fi
+
+          BAD_TOKENS='nofb|nomodeset|gfxpayload=text'
+          if grep -E "^(Kernel command line|Command line):" <<<"${LOG}" | grep -Eq "${BAD_TOKENS}"; then
+            echo "ERROR: forbidden kernel cmdline tokens (${BAD_TOKENS}) found:"
+            grep -E "^(Kernel command line|Command line):" <<<"${LOG}" | grep -E "${BAD_TOKENS}"
+            exit 1
+          fi
+        env:
+          OS_CLOUD: devstack
 
       - name: Get workload cluster KUBECONFIG
         run: clusterctl get kubeconfig test > /tmp/kubeconfig
