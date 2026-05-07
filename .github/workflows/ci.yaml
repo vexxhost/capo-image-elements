@@ -173,7 +173,7 @@ jobs:
           OPENSTACK_SSH_KEY_NAME: "runner"
 
       - name: Wait for control plane to initialize
-        run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=120s cluster/test
+        run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=10m cluster/test
 
       - name: Get workload cluster KUBECONFIG
         run: clusterctl get kubeconfig test > /tmp/kubeconfig
