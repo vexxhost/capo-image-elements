@@ -196,15 +196,19 @@ jobs:
             exit 1
           fi
 
-          if ! grep -qE '^(Kernel command line|Command line):' <<<"${LOG}"; then
-            echo "ERROR: no kernel/command line entries found in console log"
+          if ! grep -qE 'Kernel command line:' <<<"${LOG}"; then
+            echo "ERROR: no 'Kernel command line:' entry found in console log"
+            exit 1
+          fi
+          if ! grep -qE '(^|\] )Command line:' <<<"${LOG}"; then
+            echo "ERROR: no 'Command line:' entry found in console log"
             exit 1
           fi
 
           BAD_TOKENS='nofb|nomodeset|gfxpayload=text'
-          if grep -E "^(Kernel command line|Command line):" <<<"${LOG}" | grep -Eq "${BAD_TOKENS}"; then
+          if grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -Eq "${BAD_TOKENS}"; then
             echo "ERROR: forbidden kernel cmdline tokens (${BAD_TOKENS}) found:"
-            grep -E "^(Kernel command line|Command line):" <<<"${LOG}" | grep -E "${BAD_TOKENS}"
+            grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -E "${BAD_TOKENS}"
             exit 1
           fi
         env:
