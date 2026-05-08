@@ -173,47 +173,6 @@ jobs:
       - name: Wait for control plane to initialize
         run: kubectl wait --for=condition=ControlPlaneInitialized --timeout=120s cluster/test
 
-      - name: Verify control plane instance console log
-        if: ${{ always() }}
-        run: |
-          set -euo pipefail
-          mapfile -t INSTANCE_IDS < <(openstack server list -f value -c ID)
-          if [ "${#INSTANCE_IDS[@]}" -ne 1 ]; then
-            echo "Expected exactly 1 OpenStack instance, found ${#INSTANCE_IDS[@]}:"
-            openstack server list
-            exit 1
-          fi
-          INSTANCE_ID="${INSTANCE_IDS[0]}"
-          echo "Instance ID: ${INSTANCE_ID}"
-
-          LOG=$(openstack console log show "${INSTANCE_ID}")
-          echo "----- console log -----"
-          echo "${LOG}"
-          echo "----- end console log -----"
-
-          if [ -z "${LOG//[[:space:]]/}" ]; then
-            echo "ERROR: console log is empty"
-            exit 1
-          fi
-
-          if ! grep -qE 'Kernel command line:' <<<"${LOG}"; then
-            echo "ERROR: no 'Kernel command line:' entry found in console log"
-            exit 1
-          fi
-          if ! grep -qE '(^|\] )Command line:' <<<"${LOG}"; then
-            echo "ERROR: no 'Command line:' entry found in console log"
-            exit 1
-          fi
-
-          BAD_TOKENS='nofb|nomodeset|gfxpayload=text'
-          if grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -Eq "${BAD_TOKENS}"; then
-            echo "ERROR: forbidden kernel cmdline tokens (${BAD_TOKENS}) found:"
-            grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -E "${BAD_TOKENS}"
-            exit 1
-          fi
-        env:
-          OS_CLOUD: devstack
-
       - name: Get workload cluster KUBECONFIG
         run: clusterctl get kubeconfig test > /tmp/kubeconfig
 
@@ -262,6 +221,58 @@ jobs:
         run: kubectl wait --for=condition=Ready nodes --all --timeout=5m
         env:
           KUBECONFIG: /tmp/kubeconfig
+
+      - name: Verify OpenStack instance console logs
+        run: |
+          set -euo pipefail
+
+          mapfile -t PROVIDER_IDS < <(
+            kubectl get machines \
+              -l cluster.x-k8s.io/cluster-name=test \
+              -o jsonpath='{range .items[*]}{.spec.providerID}{"\n"}{end}'
+          )
+
+          if [ "${#PROVIDER_IDS[@]}" -eq 0 ]; then
+            echo "ERROR: no Machines found for cluster 'test'"
+            kubectl get machines -A
+            exit 1
+          fi
+
+          BAD_TOKENS='nofb|nomodeset|gfxpayload=text'
+          for provider_id in "${PROVIDER_IDS[@]}"; do
+            [ -n "${provider_id}" ] || continue
+            instance_id="${provider_id##*/}"
+
+            echo "Instance ID: ${instance_id} (providerID: ${provider_id})"
+            LOG=$(openstack console log show "${instance_id}")
+
+            if [ -z "${LOG//[[:space:]]/}" ]; then
+              echo "ERROR: console log is empty for instance ${instance_id}"
+              exit 1
+            fi
+
+            if ! grep -qE 'Kernel command line:' <<<"${LOG}"; then
+              echo "ERROR: no 'Kernel command line:' entry found in console log for instance ${instance_id}"
+              echo "${LOG}"
+              exit 1
+            fi
+            if ! grep -qE '(^|\] )Command line:' <<<"${LOG}"; then
+              echo "ERROR: no 'Command line:' entry found in console log for instance ${instance_id}"
+              echo "${LOG}"
+              exit 1
+            fi
+
+            if grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -Eq "${BAD_TOKENS}"; then
+              echo "ERROR: forbidden kernel cmdline tokens (${BAD_TOKENS}) found for instance ${instance_id}:"
+              grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" | grep -E "${BAD_TOKENS}"
+              exit 1
+            fi
+
+            echo "Kernel cmdline entries:"
+            grep -E '(Kernel command line|(^|\] )Command line):' <<<"${LOG}" || true
+          done
+        env:
+          OS_CLOUD: devstack
 
       - name: Start CI debugging on failures
         uses: owenthereal/action-upterm@f26ebc11e22a09b8365f39d2cdafd06f63b42053 # v1.14.0
