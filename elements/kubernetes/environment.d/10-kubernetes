@@ -6,6 +6,7 @@ export DIB_KUBELET_VERSION=${DIB_KUBERNETES_VERSION}
 export DIB_KUBECTL_VERSION=${DIB_KUBERNETES_VERSION}
 
 # NOTE(fitbeard): Avoid adding any default kernel options defined by diskimage-builder.
-#                 It defaults to 'nofb nomodeset gfxpayload=text' which prevents GPU
-#                 driver loading.
-export DIB_BOOTLOADER_DEFAULT_CMDLINE=" "
+#                 'DIB_BOOTLOADER_DEFAULT_CMDLINE' defaults to 'nofb nomodeset gfxpayload=text'
+#                 which prevents GPU drivers to load.
+export DIB_KUBERNETES_BOOTLOADER_DEFAULT_CMDLINE=${DIB_KUBERNETES_BOOTLOADER_DEFAULT_CMDLINE:-" "}
+export DIB_BOOTLOADER_DEFAULT_CMDLINE=${DIB_KUBERNETES_BOOTLOADER_DEFAULT_CMDLINE}
