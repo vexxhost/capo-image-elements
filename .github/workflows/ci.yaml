@@ -63,12 +63,16 @@ jobs:
           DIB_CLOUD_INIT_GROWPART_DEVICES: '["/"]'
           DIB_SKIP_BASE_PACKAGE_INSTALL: "1"
           DIB_IMAGE_SIZE: "3" # Debian 2.5, Rocky 2.8, Ubuntu 2.8-3.0
+      - name: Compress raw image
+        run: |
+          sudo apt-get install -y pigz
+          pigz -9 -f ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.raw
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}-${{ github.run_id }}
           path: |
             ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.qcow2
-            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.raw
+            ${{ steps.split.outputs._0 }}-${{ steps.split.outputs._1 }}-v${{ matrix.version }}.raw.gz
           if-no-files-found: error
           retention-days: 7
 
@@ -251,7 +255,7 @@ jobs:
         id: prepare_files
         shell: bash
         run: |
-          files=$(find . -mindepth 2 -maxdepth 2 \( -name "*.qcow2" -o -name "*.raw" \) -type f)
+          files=$(find . -mindepth 2 -maxdepth 2 \( -name "*.qcow2" -o -name "*.raw.gz" \) -type f)
           if [ -n "$files" ]; then
             echo "Found image files:"
             echo "$files"
