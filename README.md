@@ -25,8 +25,13 @@ Upon every merge to the main branch, a CI workflow will start up a DevStack inst
 with the Cluster API provider for OpenStack. For all maintained Kubernetes releases on
 different Linux distributions, it will spin up a cluster with the image and ensure that
 it can create a cluster successfully. After this, new images will be built and
-published as a GitHub release. In addition, contributors to this repository can trigger
-builds by using the workflow dispatch trigger.
+published as a GitHub release.
+
+Release assets include both `.qcow2` and gzip-compressed raw images (`.raw.gz`). To
+use the raw image, decompress it first (e.g. `gunzip -c image.raw.gz > image.raw`).
+
+In addition, contributors to this repository can trigger builds by using the workflow
+dispatch trigger.
 
 ## Building the images
 
