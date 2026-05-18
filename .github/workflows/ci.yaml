@@ -309,7 +309,7 @@ jobs:
         with:
           dateFormat: "YYYY.0M"
           format: "%NOW%-%MICRO%"
-      - uses: step-security/action-gh-release@dc29ef0d1f6f9a032a97ec797d9cb7ea788dde41 # v2.6.1
+      - uses: step-security/action-gh-release@277bfa82abcfdb73e5bbb19e213fd76532ee2be5 # v3.0.0
         if: steps.prepare_files.outputs.files != ''
         with:
           tag_name: ${{ steps.version.outputs.version }}
