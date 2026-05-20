@@ -12,8 +12,6 @@ linux-firmware:
   when: DISTRO_NAME != debian
 logrotate:
 lvm2:
-nfs-common:
-rsyslog:
 # NOTE(fitbeard): Use plain systemd-networkd for Debian and Rocky Linux.
 systemd-networkd:
   when: DISTRO_NAME = rocky
