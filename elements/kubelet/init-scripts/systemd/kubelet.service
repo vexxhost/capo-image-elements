@@ -5,6 +5,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
+Slice=podruntime.slice
 ExecStart=/usr/bin/kubelet
 Restart=always
 StartLimitInterval=0
