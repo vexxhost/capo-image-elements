@@ -38,12 +38,12 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "bindep", specifier = ">=2.13.0" },
-    { name = "diskimage-builder", specifier = "==3.42.0" },
+    { name = "diskimage-builder", specifier = "==3.43.0" },
 ]
 
 [[package]]
 name = "diskimage-builder"
-version = "3.42.0"
+version = "3.43.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flake8" },
@@ -53,9 +53,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "stevedore" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b3/f4/617b9d41111cfd0244a0f527610800cb0d62b14d24712c381d45e8fe86d4/diskimage_builder-3.42.0.tar.gz", hash = "sha256:bbb55a74632b0e574587adc72af49e695809423149b84d7f67cc786c5649edb5", size = 557342, upload-time = "2026-05-13T07:49:06.522Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/37/37071df7cb833220669c977cce9619e1aa25f9edf682cb362c3bf50f34d6/diskimage_builder-3.43.0.tar.gz", hash = "sha256:a0e71b53c62e9f91dfa29a19118b4f44f6c9ddbf490ce51700234f950d1d70df", size = 558919, upload-time = "2026-09-08T17:37:52.272Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a9/4e/0463faa15aa5c618691f8c959bb0c40b215f5883175e3daa0f15f3b3e5a9/diskimage_builder-3.42.0-py3-none-any.whl", hash = "sha256:8e94895e82e870cdf06aa5b440175a1c096d5d561f540106bc04bb46d90e7b02", size = 720232, upload-time = "2026-05-13T07:49:04.669Z" },
+    { url = "https://files.pythonhosted.org/packages/b3/8e/b481e221303670e0047e9f427a825e2b9d72bbbfbb354defcdabd091001b/diskimage_builder-3.43.0-py3-none-any.whl", hash = "sha256:ece951ea63ea0ea55ecb4c4a75d6d453dc5e77c5558aace3dee883fa0e2dd039", size = 721438, upload-time = "2026-09-08T17:37:50.944Z" },
 ]
 
 [[package]]
