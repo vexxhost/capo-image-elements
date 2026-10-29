@@ -271,6 +271,12 @@ jobs:
         env:
           KUBECONFIG: /tmp/kubeconfig
 
+      - name: Collect workload cluster diagnostics
+        if: ${{ failure() }}
+        run: bash hack/ci/diagnostics.sh
+        env:
+          KUBECONFIG: /tmp/kubeconfig
+
       - name: Start CI debugging on failures
         uses: owenthereal/action-upterm@47652056242288ccbebd30f836e9885d09a75365 # v1.15.0
         if: ${{ failure() }}
