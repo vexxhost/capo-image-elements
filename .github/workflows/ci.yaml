@@ -327,6 +327,7 @@ jobs:
           tag_name: ${{ steps.version.outputs.version }}
           name: ${{ steps.version.outputs.version }}
           files: ${{ steps.prepare_files.outputs.files }}
+          preserve_order: true
           prerelease: false
           make_latest: true
           generate_release_notes: true
