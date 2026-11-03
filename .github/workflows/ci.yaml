@@ -34,7 +34,7 @@ jobs:
           egress-policy: audit
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: step-security/setup-uv@74a4e3db95d70115a82e33151924944cfac643cb # v10.2.0
+      - uses: step-security/setup-uv@7e018fee7f2f085a7d0e76b2ae75727698cd887e # v10.3.0
         with:
           enable-cache: true
       - run: uv sync
