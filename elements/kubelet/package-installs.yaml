@@ -10,5 +10,3 @@ ethtool:
 iproute2:
 mount:
 socat:
-systemd-timesyncd:
-  when: DISTRO_NAME = debian
