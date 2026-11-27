@@ -18,6 +18,7 @@ Documentation=https://containerd.io
 After=network.target dbus.service
 
 [Service]
+Slice=podruntime.slice
 ExecStartPre=-/sbin/modprobe overlay
 ExecStart=/usr/bin/containerd
 

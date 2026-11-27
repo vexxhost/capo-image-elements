@@ -1,0 +1,7 @@
+[Unit]
+Description=Limited resources slice for Kubernetes services
+Documentation=man:systemd.special(7)
+DefaultDependencies=no
+Before=slices.target
+Requires=-.slice
+After=-.slice
