@@ -1,5 +1,6 @@
 chrony:
-  when: DISTRO_NAME = rocky
+  - when: DISTRO_NAME = rocky
+  - when: DISTRO_NAME = debian
 conntrack:
 coreutils:
 curl:
@@ -10,5 +11,3 @@ ethtool:
 iproute2:
 mount:
 socat:
-systemd-timesyncd:
-  when: DISTRO_NAME = debian
