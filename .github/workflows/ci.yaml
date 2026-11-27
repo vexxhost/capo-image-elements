@@ -24,9 +24,9 @@ jobs:
           - ubuntu/24.04/ubuntu-minimal/noble
           - rockylinux/9/rocky-container/9
         version:
-          - 1.35.10
-          - 1.36.6
-          - 1.37.2
+          - 1.35.11
+          - 1.36.7
+          - 1.37.3
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
@@ -91,9 +91,9 @@ jobs:
           - ubuntu/24.04/ubuntu-minimal/noble
           - rockylinux/9/rocky-container/9
         version:
-          - 1.35.10
-          - 1.36.6
-          - 1.37.2
+          - 1.35.11
+          - 1.36.7
+          - 1.37.3
     permissions:
       contents: read
     steps:
